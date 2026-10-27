@@ -23,6 +23,7 @@ class Scout:
                 mythril_timeout=settings.mythril_execution_timeout_seconds,
                 transaction_count=settings.mythril_transaction_count, solc_binary=settings.solc_binary,
                 mythril_binary=settings.mythril_binary, mythril_max_sources=settings.mythril_max_sources,
+                static_binary=settings.static_binary,
                 enabled_analyzers=set(state.enabled_analyzers),
                 demo_fallback=state.mock_mode,
             )

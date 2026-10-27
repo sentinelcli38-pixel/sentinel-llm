@@ -7,6 +7,7 @@ from pathlib import Path
 
 from sentinel.analyzers.parsers import (
     parse_mythril,
+    parse_sentinel_static,
     parse_slither,
     rank_and_deduplicate,
 )
@@ -19,6 +20,16 @@ from sentinel.schemas.vulnerability import VulnerabilityFinding
 class AnalysisBundle:
     runs: list[AnalyzerRun] = field(default_factory=list)
     findings: list[VulnerabilityFinding] = field(default_factory=list)
+
+
+def project_compiler(project: Path, profile: dict, fallback: Path | None) -> Path | None:
+    configured = profile.get("solc")
+    if isinstance(configured, str) and "/" in configured:
+        compiler = (project / configured).resolve()
+        if not compiler.is_file():
+            raise ValueError("The project's explicit compiler path is unavailable")
+        return compiler
+    return fallback
 
 
 def project_sources(project: Path) -> tuple[list[Path], dict]:
@@ -68,15 +79,17 @@ def _analyze(tool: str, target: str, command: list[str], project: Path,
 def run_scout_tools(project: Path, runner: ControlledRunner, *, mythril_timeout: int = 60,
                     transaction_count: int = 2, solc_binary: Path | None = None,
                     mythril_binary: Path | None = None,
+                    static_binary: Path | None = None,
                     mythril_max_sources: int = 10,
                     enabled_analyzers: set[str] | None = None,
                     demo_fallback: bool = False) -> AnalysisBundle:
     """Run Slither plus bounded Mythril analysis without unbounded corpus runtimes."""
     project = project.resolve()
     enabled = enabled_analyzers or {"slither", "mythril"}
-    if not enabled <= {"slither", "mythril"} or not enabled:
+    if not enabled <= {"slither", "mythril", "sentinel-static"} or not enabled:
         raise ValueError("At least one supported analyzer must be enabled")
     paths, profile = project_sources(project)
+    solc_binary = project_compiler(project, profile, solc_binary)
     # Slither follows imports and will otherwise report hundreds of issues in vendored
     # libraries.  Keep the audit focused on the target project's configured source
     # directory; callers can scan a dependency as its own Foundry project when needed.
@@ -91,9 +104,18 @@ def run_scout_tools(project: Path, runner: ControlledRunner, *, mythril_timeout:
     bundle = AnalysisBundle()
     if "slither" in enabled:
         run, findings = _analyze("slither", ".", ["slither", ".", "--json", "-"], project, runner, parse_slither)
-        findings = [finding for finding in findings if is_project_source(finding)]
+        # Preserve unlocated evidence so scoped evaluation can flag ambiguous
+        # attribution instead of silently counting it as an absent finding.
+        findings = [finding for finding in findings if not finding.file or is_project_source(finding)]
         # The report describes the target-project findings, rather than the scanner's
         # raw total which also includes imported third-party dependencies.
+        run.finding_count = len(findings)
+        bundle.runs.append(run)
+        bundle.findings.extend(findings)
+    if "sentinel-static" in enabled:
+        static_command = str(static_binary.resolve()) if static_binary else "sentinel-static"
+        run, findings = _analyze("sentinel-static", ".", [static_command, "."], project, runner, parse_sentinel_static)
+        findings = [finding for finding in findings if not finding.file or is_project_source(finding)]
         run.finding_count = len(findings)
         bundle.runs.append(run)
         bundle.findings.extend(findings)

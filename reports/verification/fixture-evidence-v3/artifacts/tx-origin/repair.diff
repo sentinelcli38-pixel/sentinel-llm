@@ -1,0 +1,11 @@
+--- a/src/TxOriginWallet.sol
++++ b/src/TxOriginWallet.sol
+@@ -9,7 +9,7 @@
+     }
+ 
+     function withdraw(address payable recipient) external {
+-        require(tx.origin == owner, "not owner");
++        require(msg.sender == owner, "not owner");
+         recipient.transfer(address(this).balance);
+     }
+ }

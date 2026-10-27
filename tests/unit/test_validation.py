@@ -1,6 +1,6 @@
+from pathlib import Path
+
 from sentinel.agents.judge import Judge
-from sentinel.schemas.execution import ExecutionResult
-from sentinel.schemas.state import RuntimeState
 from sentinel.validation import ValidationProfile, declared_public_api, declared_storage
 
 
@@ -22,31 +22,13 @@ def test_validation_profile_rejects_non_identifier_test_selectors() -> None:
         raise AssertionError("Unsafe test selector must be rejected")
 
 
-def test_judge_rejects_patch_that_breaks_required_declared_abi(tmp_path) -> None:
-    (tmp_path / "sentinel-validation.yml").write_text("require_abi_compatibility: true\n")
-
-    class PassingFoundry:
-        @staticmethod
-        def build(project):
-            return ExecutionResult(command=["forge", "build"], cwd=str(project), exit_code=0, success=True)
-
-        @staticmethod
-        def exploit(project):
-            return ExecutionResult(command=["forge", "test"], cwd=str(project), exit_code=1, success=False)
-
-        @staticmethod
-        def regression(project):
-            return ExecutionResult(command=["forge", "test"], cwd=str(project), exit_code=0, success=True)
-
-        @staticmethod
-        def named_test(project, name):
-            return ExecutionResult(command=["forge", "test", "--match-test", name], cwd=str(project), exit_code=0, success=True)
-
-    original = {"src/Vault.sol": "contract Vault { function withdraw(uint256 amount) external {} }"}
-    patched = {"src/Vault.sol": "contract Vault { function withdraw(address recipient) external {} }"}
-    state = Judge(PassingFoundry()).verify(
-        RuntimeState(project_path=str(tmp_path), original_source=original, patched_source=patched)
-    )
+def test_judge_rejects_patch_that_breaks_required_declared_abi(repair_state, repair_foundry) -> None:
+    project = Path(repair_state.project_path)
+    (project / "sentinel-validation.yml").write_text("require_abi_compatibility: true\n")
+    file = "src/VulnerableVault.sol"
+    repair_state.patched_source[file] = repair_state.patched_source[file].replace("function withdraw()", "function withdraw(uint256 amount)")
+    (project / file).write_text(repair_state.patched_source[file])
+    state = Judge(repair_foundry).verify(repair_state)
 
     assert state.judge_result is not None
     assert state.judge_result.abi_compatible is False

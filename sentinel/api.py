@@ -54,8 +54,11 @@ def _reports() -> list[Path]:
 
 
 def _response(state: RuntimeState) -> ScanResponse:
+    outcome = state.final_verification_state
+    if outcome == "verified" and (not state.judge_result or state.judge_result.evidence_version != 1):
+        outcome = "legacy_verification_requires_rescan"
     return ScanResponse(
-        final_state=state.final_verification_state,
+        final_state=outcome,
         report_path=state.final_report_path,
         ledger_name=Path(state.final_report_path).with_suffix(".json").name if state.final_report_path else None,
         findings=len(state.findings),
@@ -140,7 +143,8 @@ def stream_run_events(run_id: str) -> StreamingResponse:
         last_id = 0
         while True:
             with telemetry.condition:
-                telemetry.condition.wait(timeout=15)
+                if not any(int(event["id"]) > last_id for event in telemetry.events) and telemetry.status not in {"completed", "failed"}:
+                    telemetry.condition.wait(timeout=15)
                 pending = [event for event in telemetry.events if int(event["id"]) > last_id]
                 status = telemetry.status
             for event in pending:

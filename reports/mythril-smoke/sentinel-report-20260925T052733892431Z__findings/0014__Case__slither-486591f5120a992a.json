@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-486591f5120a992a",
+  "type": "naming-convention",
+  "severity": "informational",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 10
+  },
+  "what_was_observed": "Variable Proxy.Owner (src/Case.sol#10) is not in mixedCase\n",
+  "evidence": [
+    "slither:naming-convention: Variable Proxy.Owner (src/Case.sol#10) is not in mixedCase\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

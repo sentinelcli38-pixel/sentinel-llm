@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "test",
+    "--json",
+    "--no-match-test",
+    "^testExploit\\(.*\\)$",
+    "--use",
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--offline",
+    "--threads",
+    "1"
+  ],
+  "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/reentrancy",
+  "duration_seconds": 0.1129081670000005,
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"441\u00b5s 417ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":127103}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"207\u00b5s 667ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Vault.t.sol:VaultTest\":{\"duration\":\"107\u00b5s 166ns\",\"test_results\":{\"testDepositAndWithdraw()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":88269}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"37\u00b5s 750ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+  "success": true,
+  "timed_out": false
+}

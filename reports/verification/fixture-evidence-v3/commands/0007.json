@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "test",
+    "--json",
+    "--match-test",
+    "^testExploit\\(.*\\)$",
+    "--match-path",
+    "test/SentinelExploit_bf055fc5aa702b2a.t.sol",
+    "--use",
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--offline",
+    "--threads",
+    "1"
+  ],
+  "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/reentrancy",
+  "duration_seconds": 0.07162691600001381,
+  "exit_code": 1,
+  "stderr": "",
+  "stdout": "{\"test/SentinelExploit_bf055fc5aa702b2a.t.sol:ExploitTest\":{\"duration\":\"431\u00b5s 42ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Failure\",\"reason\":\"reentrancy did not drain victim funds\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":97413}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"85\u00b5s 333ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+  "success": false,
+  "timed_out": false
+}

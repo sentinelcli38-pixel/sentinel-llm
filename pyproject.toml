@@ -21,10 +21,12 @@ dependencies = [
 [project.optional-dependencies]
 llm = ["google-generativeai>=0.8.0", "openai>=1.40.0"]
 dev = ["pytest>=8.0.0", "ruff>=0.6.0"]
+static = ["slither-analyzer==0.11.6"]
 
 [project.scripts]
 sentinel = "sentinel.cli:app"
 sentinel-api = "sentinel.api:main"
+sentinel-static = "sentinel.analyzers.call_results:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["sentinel"]

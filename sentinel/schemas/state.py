@@ -43,6 +43,9 @@ class RuntimeState(BaseModel):
     exploit_source: str = ""
     exploit_artifact: ExploitArtifact | None = None
     exploit_result: ExecutionResult | None = None
+    baseline_exploit_result: ExecutionResult | None = None
+    baseline_regression_result: ExecutionResult | None = None
+    oracle_test_hashes: dict[str, str] = Field(default_factory=dict)
     exploit_confirmed: bool = False
     original_source: dict[str, str] = Field(default_factory=dict)
     patched_source: dict[str, str] = Field(default_factory=dict)

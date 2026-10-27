@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--version"
+  ],
+  "cwd": "/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl",
+  "duration_seconds": 0.01567800000009356,
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "solc, the solidity compiler commandline interface\nVersion: 0.8.20+commit.a1b79de6.Darwin.appleclang\n",
+  "success": true,
+  "timed_out": false
+}

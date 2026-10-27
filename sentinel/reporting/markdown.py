@@ -2,6 +2,7 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+from sentinel.coverage import coverage_complete
 from sentinel.reporting.sarif import render_sarif
 from sentinel.schemas.state import RuntimeState
 
@@ -22,9 +23,7 @@ def _scout_summary(state: RuntimeState) -> str:
     has_fixture = any(finding.source == "local-heuristic" for finding in state.findings)
     if state.mock_mode and has_fixture:
         return "fixture candidate selected for the deterministic demonstration"
-    if state.analyzer_runs and all(run.status in {"completed", "skipped"} for run in state.analyzer_runs):
-        if any(run.status == "skipped" and run.tool == "mythril" for run in state.analyzer_runs):
-            return "Slither completed and Mythril completed its configured bounded sample"
+    if coverage_complete(state):
         return "live scanner analysis completed"
     return "live scanner coverage is incomplete"
 
@@ -110,7 +109,7 @@ def render_report(state: RuntimeState) -> str:
         "## How to read this report",
         "- A **candidate** is a scanner or fixture pattern, not a proven exploit.",
         "- **confirmed** means the Red Team's Forge test reproduced the impact.",
-        "- **verified** means the Judge built the patched copy, the exploit test failed, and the other tests passed.",
+        "- **verified** means a reviewed, unchanged exploit passed on the original and failed on the patched copy, while the same nonempty regression suite and configured checks passed. It is not a guarantee that the contract is safe.",
         "- **execution_unavailable** or **analysis_incomplete** means install/configure the listed local tool before treating the absence of findings as meaningful.",
         "",
         "## Final Outcome",
@@ -167,6 +166,8 @@ def write_report(state: RuntimeState, output_dir: Path) -> Path:
             "patched_solidity_files": [Path(path).name for path in state.report_artifacts if ".patch.sol" in Path(path).name],
         },
         "verification": {
+            "verified": bool(state.judge_result and state.judge_result.verified),
+            "coverage_complete": coverage_complete(state),
             "build_passed": state.judge_result.build_passed if state.judge_result else False,
             "exploit_blocked": state.judge_result.exploit_neutralized if state.judge_result else False,
             "regression_passed": state.judge_result.regression_passed if state.judge_result else False,
@@ -191,6 +192,7 @@ def write_report(state: RuntimeState, output_dir: Path) -> Path:
             "evidence": finding.evidence,
             "pipeline_status": "selected_for_agentic_validation" if is_selected else "scout_candidate",
             "patch_file": patch_name,
+            "patch_verified": bool(is_selected and state.judge_result and state.judge_result.verified),
         }
         (findings_dir / f"{finding_stem}.json").write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
         lines = [f"# {contract}: {finding.detector}", "", f"- **Severity:** {finding.severity}",
@@ -198,6 +200,7 @@ def write_report(state: RuntimeState, output_dir: Path) -> Path:
                  "", "## Evidence", *[f"- {item}" for item in finding.evidence], "", "## Status",
                  "Selected for Gemini/Forge validation." if is_selected else "Scout candidate; no exploit or patch has been approved yet."]
         if patch_name:
-            lines.extend(["", f"Verified patch artifact: `{patch_name}`"])
+            label = "Verified" if state.judge_result and state.judge_result.verified else "Proposed, unverified"
+            lines.extend(["", f"{label} patch artifact: `{patch_name}`"])
         (findings_dir / f"{finding_stem}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     return report_path

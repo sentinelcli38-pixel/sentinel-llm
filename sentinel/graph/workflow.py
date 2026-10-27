@@ -10,8 +10,13 @@ from sentinel.agents.blue_team import BlueTeam
 from sentinel.agents.judge import Judge
 from sentinel.agents.red_team import RedTeam
 from sentinel.agents.scout import Scout
-from sentinel.analyzers.tools import extract_solidity_context
+from sentinel.analyzers.tools import (
+    extract_solidity_context,
+    project_compiler,
+    project_sources,
+)
 from sentinel.config import settings
+from sentinel.coverage import coverage_complete
 from sentinel.foundry.runner import FoundryRunner
 from sentinel.llm.gemini import GeminiProvider, GeminiScout
 from sentinel.llm.mock import MockProvider
@@ -44,7 +49,12 @@ def build_workflow(runner: ControlledRunner | None = None, observer: WorkflowObs
             started = monotonic()
             if observer:
                 observer(name, state, "started", 0.0)
-            result = handler(state)
+            try:
+                result = handler(state)
+            except Exception:
+                if observer:
+                    observer(name, state, "failed", monotonic() - started)
+                raise
             if observer:
                 observer(name, result, "completed", monotonic() - started)
             return result
@@ -57,10 +67,13 @@ def build_workflow(runner: ControlledRunner | None = None, observer: WorkflowObs
             state.final_verification_state = "invalid_project"
             return state
         workspace = Path(tempfile.mkdtemp(prefix="sentinel-workspace-")) / "project"
+        state.workspace_path = str(workspace)
         try:
             shutil.copytree(project, workspace, ignore=shutil.ignore_patterns("out", "cache", ".git", "__pycache__"))
             files, original, context = extract_solidity_context(workspace)
         except (OSError, ValueError, TypeError) as exc:
+            shutil.rmtree(workspace.parent, ignore_errors=True)
+            state.workspace_path = None
             state.feedback.append(f"Invalid project source configuration: {exc}")
             state.final_verification_state = "invalid_project"
             return state
@@ -71,7 +84,8 @@ def build_workflow(runner: ControlledRunner | None = None, observer: WorkflowObs
 
     def static_analysis(state: RuntimeState) -> RuntimeState:
         project = Path(state.workspace_path or state.project_path)
-        compiler_command = str(settings.solc_binary) if settings.solc_binary else "solc"
+        compiler_path = project_compiler(project, project_sources(project)[1], settings.solc_binary)
+        compiler_command = str(compiler_path) if compiler_path else "solc"
         compiler = controlled.run([compiler_command, "--version"], project)
         state.compiler_info = {
             "command": f"{compiler_command} --version",
@@ -87,12 +101,7 @@ def build_workflow(runner: ControlledRunner | None = None, observer: WorkflowObs
         # Novelty signals are intentionally not candidate_id values: only scanner
         # evidence may enter the automated exploit/patch loop.
         state.risk_assessment = assess_protocol_risk(state.protocol_map, state.findings)
-        # A bounded Mythril sample is intentional: it prevents a large multi-contract
-        # corpus from turning a normal scan into an unbounded symbolic-execution job.
-        # Only actual tool failures make the Scout coverage incomplete.
-        complete = bool(state.analyzer_runs) and all(
-            r.status in {"completed", "skipped"} for r in state.analyzer_runs
-        )
+        complete = coverage_complete(state)
         if state.scout_only:
             state.final_verification_state = "scout_complete" if complete else "scout_incomplete"
         elif not state.findings:
@@ -141,7 +150,7 @@ def build_workflow(runner: ControlledRunner | None = None, observer: WorkflowObs
         return "blue_team" if state.exploit_confirmed else "discard"
 
     def route_after_judge(state: RuntimeState) -> str:
-        if state.final_verification_state == "verified":
+        if state.final_verification_state != "retry_required":
             return "report"
         if state.retry_count >= state.max_retries:
             return "report"
@@ -167,7 +176,7 @@ def build_workflow(runner: ControlledRunner | None = None, observer: WorkflowObs
     graph.add_conditional_edges("scout", route_after_scout, {"report": "report", "red_team": "red_team"})
     graph.add_conditional_edges("red_team", route_after_exploit, {"blue_team": "blue_team", "discard": "discard", "report": "report"})
     graph.add_edge("discard", "report")
-    graph.add_edge("blue_team", "judge")
+    graph.add_conditional_edges("blue_team", lambda state: "judge" if state.final_verification_state in {"not_started", "retry_required"} and state.patch_diff else "report", {"judge": "judge", "report": "report"})
     graph.add_conditional_edges("judge", route_after_judge, {"blue_team": "blue_team", "report": "report"})
     graph.add_edge("report", END)
     return graph.compile()

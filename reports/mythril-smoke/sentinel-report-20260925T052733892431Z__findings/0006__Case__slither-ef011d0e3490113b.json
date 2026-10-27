@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-ef011d0e3490113b",
+  "type": "events-access",
+  "severity": "low",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 11
+  },
+  "what_was_observed": "Proxy.transferOwner(address) (src/Case.sol#11) should emit an event for: \n\t- Owner = _owner (src/Case.sol#11) \n",
+  "evidence": [
+    "slither:events-access: Proxy.transferOwner(address) (src/Case.sol#11) should emit an event for: \n\t- Owner = _owner (src/Case.sol#11) \n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

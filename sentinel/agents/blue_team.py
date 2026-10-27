@@ -72,6 +72,7 @@ class BlueTeam:
             patched = path.read_text(encoding="utf-8")
         elif old not in original:
             state.feedback.append("Blue Team could not locate a minimal patch anchor")
+            state.final_verification_state = "human_review_required"
             return state
         else:
             apply_replacement(workspace, relative, old, new, set(state.original_source))

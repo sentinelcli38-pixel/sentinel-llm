@@ -87,6 +87,10 @@ contract ExploitTest { function testExploit() public {} }
     red_team.generate_and_validate(state)
     assert state.exploit_source.startswith("pragma solidity")
     assert provider.prompts
+    assert state.final_verification_state == "human_review_required"
+    assert state.exploit_result is None
+    assert not state.exploit_confirmed
+    assert state.exploit_artifact.origin == "model_generated"
 
 
 def test_blue_team_uses_provider_for_unknown_candidates(tmp_path: Path) -> None:
@@ -143,7 +147,8 @@ def test_judge_requires_a_real_forge_test_failure(tmp_path: Path) -> None:
     state = RuntimeState(project_path=str(tmp_path))
     judge = Judge(FakeFoundry(execution(0), execution(1), execution(0)))
     judge.verify(state)
-    assert state.judge_result and state.judge_result.verified
+    assert state.judge_result and not state.judge_result.verified
+    assert state.final_verification_state == "human_review_required"
 
 
 def test_blue_team_only_modifies_explicit_workspace(tmp_path: Path) -> None:

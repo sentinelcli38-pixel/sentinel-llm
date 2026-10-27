@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "build",
+    "--use",
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--offline",
+    "--threads",
+    "1"
+  ],
+  "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/unchecked-call",
+  "duration_seconds": 0.0793109580000646,
+  "exit_code": 0,
+  "stderr": "warning[arbitrary-send-eth]: ETH is sent to a user-controlled destination; restrict the destination or the caller\n   \u256d\u25b8 src/UncheckedCallWallet.sol:13:24\n   \u2502\n13 \u2502         (bool sent,) = recipient.call{value: amount}(\"\");\n   \u2502                        \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n   \u2502\n   \u2570 help: https://getfoundry.sh/forge/linting/arbitrary-send-eth\n\nwarning[reentrancy-eth]: uncapped ETH transfer can be reentered before `balances` is updated\n   \u256d\u25b8 src/UncheckedCallWallet.sol:13:24\n   \u2502\n13 \u2502         (bool sent,) = recipient.call{value: amount}(\"\");\n   \u2502                        \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n   \u2502\n   \u2570 help: https://getfoundry.sh/forge/linting/reentrancy-eth\n\nwarning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check\n   \u256d\u25b8 src/UncheckedCallWallet.sol:11:23\n   \u2502\n11 \u2502     function withdraw(address payable recipient) external {\n   \u2502                       \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n   \u2502\n   \u2570 help: https://getfoundry.sh/forge/linting/missing-zero-check\n\n",
+  "stdout": "Compiling 1 files with Solc 0.8.20\nSolc 0.8.20 finished in 12.43ms\nCompiler run successful!\n",
+  "success": true,
+  "timed_out": false
+}

@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-39a63f60b65a8e6f",
+  "type": "missing-zero-check",
+  "severity": "low",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 12
+  },
+  "what_was_observed": "Phishable.constructor(address)._owner (src/Case.sol#12) lacks a zero-check on :\n\t\t- owner = _owner (src/Case.sol#13)\n",
+  "evidence": [
+    "slither:missing-zero-check: Phishable.constructor(address)._owner (src/Case.sol#12) lacks a zero-check on :\n\t\t- owner = _owner (src/Case.sol#13)\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

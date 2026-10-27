@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "test",
+    "--json",
+    "--no-match-test",
+    "^testExploit\\(.*\\)$",
+    "--use",
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--offline",
+    "--threads",
+    "1"
+  ],
+  "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/unchecked-call",
+  "duration_seconds": 0.06544016700001976,
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"335\u00b5s 250ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":158751}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"168\u00b5s 375ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Wallet.t.sol:WalletTest\":{\"duration\":\"77\u00b5s 583ns\",\"test_results\":{\"testDeposit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":30960}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"45\u00b5s 125ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+  "success": true,
+  "timed_out": false
+}

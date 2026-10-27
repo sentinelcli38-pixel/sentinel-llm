@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "test",
+    "--json",
+    "--match-test",
+    "^testExploit\\(.*\\)$",
+    "--match-path",
+    "test/SentinelExploit_a0ff782691c5ecc8.t.sol",
+    "--use",
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--offline",
+    "--threads",
+    "1"
+  ],
+  "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/tx-origin",
+  "duration_seconds": 0.06319533399999955,
+  "exit_code": 1,
+  "stderr": "",
+  "stdout": "{\"test/SentinelExploit_a0ff782691c5ecc8.t.sol:ExploitTest\":{\"duration\":\"324\u00b5s 750ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Failure\",\"reason\":\"not owner\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":39159}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"56\u00b5s 959ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+  "success": false,
+  "timed_out": false
+}

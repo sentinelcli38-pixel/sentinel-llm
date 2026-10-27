@@ -1,0 +1,342 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Sentinel",
+          "rules": [
+            {
+              "id": "arbitrary-send-eth",
+              "name": "arbitrary-send-eth",
+              "shortDescription": {
+                "text": "arbitrary send eth"
+              }
+            },
+            {
+              "id": "SWC-105",
+              "name": "SWC-105",
+              "shortDescription": {
+                "text": "SWC 105"
+              }
+            },
+            {
+              "id": "tx-origin",
+              "name": "tx-origin",
+              "shortDescription": {
+                "text": "tx origin"
+              }
+            },
+            {
+              "id": "SWC-114",
+              "name": "SWC-114",
+              "shortDescription": {
+                "text": "SWC 114"
+              }
+            },
+            {
+              "id": "missing-zero-check",
+              "name": "missing-zero-check",
+              "shortDescription": {
+                "text": "missing zero check"
+              }
+            },
+            {
+              "id": "SWC-115",
+              "name": "SWC-115",
+              "shortDescription": {
+                "text": "SWC 115"
+              }
+            },
+            {
+              "id": "solc-version",
+              "name": "solc-version",
+              "shortDescription": {
+                "text": "solc version"
+              }
+            },
+            {
+              "id": "naming-convention",
+              "name": "naming-convention",
+              "shortDescription": {
+                "text": "naming convention"
+              }
+            },
+            {
+              "id": "privilege-boundary-outlier",
+              "name": "privilege-boundary-outlier",
+              "shortDescription": {
+                "text": "privilege boundary outlier"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "arbitrary-send-eth",
+          "level": "error",
+          "message": {
+            "text": "Phishable.withdrawAll(address) (src/Case.sol#18-22) sends eth to arbitrary user\n\tDangerous calls:\n\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n"
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "medium",
+            "evidence": [
+              "slither:arbitrary-send-eth: Phishable.withdrawAll(address) (src/Case.sol#18-22) sends eth to arbitrary user\n\tDangerous calls:\n\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SWC-105",
+          "level": "error",
+          "message": {
+            "text": "Unprotected Ether Withdrawal\nAny sender can withdraw Ether from the contract account.\nArbitrary senders other than the contract creator can profitably extract Ether from the contract account. Verify the business logic carefully and make sure that appropriate security controls are in place to prevent unexpected loss of funds."
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "unknown",
+            "evidence": [
+              "mythril:SWC-105: Any sender can withdraw Ether from the contract account.\nArbitrary senders other than the contract creator can profitably extract Ether from the contract account. Verify the business logic carefully and make sure that appropriate security controls are in place to prevent unexpected loss of funds."
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "tx-origin",
+          "level": "warning",
+          "message": {
+            "text": "Phishable.withdrawAll(address) (src/Case.sol#18-22) uses tx.origin for authorization: require(bool)(tx.origin == owner) (src/Case.sol#20)\n"
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "medium",
+            "evidence": [
+              "slither:tx-origin: Phishable.withdrawAll(address) (src/Case.sol#18-22) uses tx.origin for authorization: require(bool)(tx.origin == owner) (src/Case.sol#20)\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SWC-114",
+          "level": "warning",
+          "message": {
+            "text": "Transaction Order Dependence\nThe value of the call is dependent on balance or storage write\nThis can lead to race conditions. An attacker may be able to run a transaction after our transaction which can change the value of the call"
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "unknown",
+            "evidence": [
+              "mythril:SWC-114: The value of the call is dependent on balance or storage write\nThis can lead to race conditions. An attacker may be able to run a transaction after our transaction which can change the value of the call"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "missing-zero-check",
+          "level": "note",
+          "message": {
+            "text": "Phishable.constructor(address)._owner (src/Case.sol#12) lacks a zero-check on :\n\t\t- owner = _owner (src/Case.sol#13)\n"
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "medium",
+            "evidence": [
+              "slither:missing-zero-check: Phishable.constructor(address)._owner (src/Case.sol#12) lacks a zero-check on :\n\t\t- owner = _owner (src/Case.sol#13)\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "missing-zero-check",
+          "level": "note",
+          "message": {
+            "text": "Phishable.withdrawAll(address)._recipient (src/Case.sol#18) lacks a zero-check on :\n\t\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n"
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "medium",
+            "evidence": [
+              "slither:missing-zero-check: Phishable.withdrawAll(address)._recipient (src/Case.sol#18) lacks a zero-check on :\n\t\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SWC-115",
+          "level": "note",
+          "message": {
+            "text": "Dependence on tx.origin\nUse of tx.origin as a part of authorization control.\nThe tx.origin environment variable has been found to influence a control flow decision. Note that using tx.origin as a security control might cause a situation where a user inadvertently authorizes a smart contract to perform an action on their behalf. It is recommended to use msg.sender instead."
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "unknown",
+            "evidence": [
+              "mythril:SWC-115: Use of tx.origin as a part of authorization control.\nThe tx.origin environment variable has been found to influence a control flow decision. Note that using tx.origin as a security control might cause a situation where a user inadvertently authorizes a smart contract to perform an action on their behalf. It is recommended to use msg.sender instead."
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 20
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "solc-version",
+          "level": "note",
+          "message": {
+            "text": "Version constraint ^0.4.22 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- DirtyBytesArrayToStorage\n\t- ABIDecodeTwoDimensionalArrayMemory\n\t- KeccakCaching\n\t- EmptyByteArrayCopy\n\t- DynamicArrayCleanup\n\t- ImplicitConstructorCallvalueCheck\n\t- TupleAssignmentMultiStackSlotComponents\n\t- MemoryArrayCreationOverflow\n\t- privateCanBeOverridden\n\t- SignedArrayStorageCopy\n\t- ABIEncoderV2StorageArrayWithMultiSlotElement\n\t- DynamicConstructorArgumentsClippedABIV2\n\t- UninitializedFunctionPointerInConstructor_0.4.x\n\t- IncorrectEventSignatureInLibraries_0.4.x\n\t- ABIEncoderV2PackedStorage_0.4.x\n\t- ExpExponentCleanup\n\t- EventStructWrongData\n\t- OneOfTwoConstructorsSkipped.\nIt is used by:\n\t- ^0.4.22 (src/Case.sol#7)\n"
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "high",
+            "evidence": [
+              "slither:solc-version: Version constraint ^0.4.22 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- DirtyBytesArrayToStorage\n\t- ABIDecodeTwoDimensionalArrayMemory\n\t- KeccakCaching\n\t- EmptyByteArrayCopy\n\t- DynamicArrayCleanup\n\t- ImplicitConstructorCallvalueCheck\n\t- TupleAssignmentMultiStackSlotComponents\n\t- MemoryArrayCreationOverflow\n\t- privateCanBeOverridden\n\t- SignedArrayStorageCopy\n\t- ABIEncoderV2StorageArrayWithMultiSlotElement\n\t- DynamicConstructorArgumentsClippedABIV2\n\t- UninitializedFunctionPointerInConstructor_0.4.x\n\t- IncorrectEventSignatureInLibraries_0.4.x\n\t- ABIEncoderV2PackedStorage_0.4.x\n\t- ExpExponentCleanup\n\t- EventStructWrongData\n\t- OneOfTwoConstructorsSkipped.\nIt is used by:\n\t- ^0.4.22 (src/Case.sol#7)\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "naming-convention",
+          "level": "note",
+          "message": {
+            "text": "Parameter Phishable.withdrawAll(address)._recipient (src/Case.sol#18) is not in mixedCase\n"
+          },
+          "properties": {
+            "sentinelStatus": "candidate",
+            "confidence": "high",
+            "evidence": [
+              "slither:naming-convention: Parameter Phishable.withdrawAll(address)._recipient (src/Case.sol#18) is not in mixedCase\n"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "privilege-boundary-outlier",
+          "level": "warning",
+          "message": {
+            "text": "This public state-changing function sits beside privileged controls but declares no recognizable access modifier; review the intended authorization model."
+          },
+          "properties": {
+            "sentinelStatus": "human_review_required",
+            "confidence": "low",
+            "evidence": [
+              "Privileged-control indicators exist in the contract source",
+              "Public/external function has a state-change signal without a recognized modifier",
+              "Source heuristic only; authorization may be enforced internally."
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Case.sol"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

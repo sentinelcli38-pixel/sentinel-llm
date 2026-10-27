@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-d69b066f34024b2f",
+  "type": "naming-convention",
+  "severity": "informational",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 11
+  },
+  "what_was_observed": "Parameter Proxy.transferOwner(address)._owner (src/Case.sol#11) is not in mixedCase\n",
+  "evidence": [
+    "slither:naming-convention: Parameter Proxy.transferOwner(address)._owner (src/Case.sol#11) is not in mixedCase\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

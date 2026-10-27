@@ -1,0 +1,12 @@
+--- a/src/VulnerableVault.sol
++++ b/src/VulnerableVault.sol
+@@ -10,8 +10,8 @@
+ 
+     function withdraw() external {
+         uint256 amount = balances[msg.sender];
++        balances[msg.sender] = 0;
+         (bool sent,) = msg.sender.call{value: amount}(""); // reentrancy demo
+         require(sent, "send failed");
+-        balances[msg.sender] = 0;
+     }
+ }

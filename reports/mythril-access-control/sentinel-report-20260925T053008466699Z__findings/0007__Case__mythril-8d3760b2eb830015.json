@@ -1,0 +1,15 @@
+{
+  "finding_id": "mythril-8d3760b2eb830015",
+  "type": "SWC-115",
+  "severity": "low",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 20
+  },
+  "what_was_observed": "Dependence on tx.origin\nUse of tx.origin as a part of authorization control.\nThe tx.origin environment variable has been found to influence a control flow decision. Note that using tx.origin as a security control might cause a situation where a user inadvertently authorizes a smart contract to perform an action on their behalf. It is recommended to use msg.sender instead.",
+  "evidence": [
+    "mythril:SWC-115: Use of tx.origin as a part of authorization control.\nThe tx.origin environment variable has been found to influence a control flow decision. Note that using tx.origin as a security control might cause a situation where a user inadvertently authorizes a smart contract to perform an action on their behalf. It is recommended to use msg.sender instead."
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

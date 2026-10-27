@@ -1,0 +1,9 @@
+{
+  "name": "sentinel-research-ast",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Optional contract-scoped research features; not production detector dependencies",
+  "dependencies": {
+    "@solidity-parser/parser": "0.20.2"
+  }
+}

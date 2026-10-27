@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-31141cf0aae2143d",
+  "type": "missing-zero-check",
+  "severity": "low",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 18
+  },
+  "what_was_observed": "Phishable.withdrawAll(address)._recipient (src/Case.sol#18) lacks a zero-check on :\n\t\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n",
+  "evidence": [
+    "slither:missing-zero-check: Phishable.withdrawAll(address)._recipient (src/Case.sol#18) lacks a zero-check on :\n\t\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

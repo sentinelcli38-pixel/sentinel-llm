@@ -1,9 +1,13 @@
 """Normalize documented Slither and Mythril JSON without treating exit codes as findings."""
 import hashlib
 import json
+import re
 from pathlib import Path
 
 from sentinel.schemas.vulnerability import VulnerabilityFinding
+
+STATIC_DETECTORS = {"unused-call-result", "origin-auth-alternative", "inherited-reentrancy-eth",
+                    "inherited-reentrancy-no-eth", "inherited-reentrancy-benign", "inherited-reentrancy-events"}
 
 SEVERITY = {"critical": 5, "high": 4, "medium": 3, "low": 2, "informational": 1, "optimization": 0, "unknown": -1}
 CONFIDENCE = {"high": 0.9, "medium": 0.6, "low": 0.3, "unknown": 0.0}
@@ -26,6 +30,19 @@ def _line(value: object) -> int | None:
 
 def _text(value: object, default: str = "") -> str:
     return value if isinstance(value, str) else default
+
+
+def _parent_contract(element: dict) -> str:
+    # Slither normally attaches the contract to a function/node's parent chain.
+    for _ in range(8):
+        if element.get("type") == "contract":
+            return _text(element.get("name"))
+        fields = element.get("type_specific_fields")
+        parent = fields.get("parent") if isinstance(fields, dict) else None
+        if not isinstance(parent, dict):
+            break
+        element = parent
+    return ""
 
 
 def _document(raw: str, key: str) -> list[dict]:
@@ -67,7 +84,7 @@ def parse_slither(raw: str, project: Path) -> list[VulnerabilityFinding]:
             raise TypeError("Slither source lines must be a list")
         line = next((n for n in map(_line, lines) if n is not None), None)
         function = next((_text(e.get("name")) for e in elements if e.get("type") == "function"), "")
-        contract = next((_text(e.get("name")) for e in elements if e.get("type") == "contract"), "")
+        contract = _parent_contract(primary)
         severity = _text(item.get("impact"), "unknown").lower()
         confidence = _text(item.get("confidence"), "unknown").lower()
         findings.append(VulnerabilityFinding(
@@ -104,6 +121,37 @@ def parse_mythril(raw: str, project: Path) -> list[VulnerabilityFinding]:
             description=f"{title}\n{description}", evidence=[f"mythril:{detector}: {description}"],
             raw_output=json.dumps(item, sort_keys=True),
         ))
+    return findings
+
+
+def parse_sentinel_static(raw: str, project: Path) -> list[VulnerabilityFinding]:
+    findings = parse_slither(raw, project)
+    for finding in findings:
+        if finding.detector not in STATIC_DETECTORS:
+            raise ValueError("Unexpected experimental static detector")
+        item = json.loads(finding.raw_output)
+        elements = item.get("elements", [])
+        primary = elements[0] if elements else {}
+        mapping = primary.get("source_mapping") or {}
+        if mapping.get("filename_absolute"):
+            finding.file = local_path(project, mapping["filename_absolute"])
+        fields = item.get("additional_fields") or {}
+        if not isinstance(fields, dict):
+            raise TypeError("Invalid experimental static metadata")
+        context = fields.get("execution_contract")
+        if context is not None:
+            if (not isinstance(context, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", context)
+                    or fields.get("declaring_contract") != finding.contract
+                    or fields.get("attribution") != "compiled-inherited-entry-point"
+                    or not any(element.get("type") == "contract" and element.get("name") == context for element in elements)):
+                raise ValueError("Invalid compiled inheritance attribution")
+            finding.contract = context
+        elif finding.detector.startswith("inherited-"):
+            raise ValueError("Inherited detector requires compiled execution context")
+        finding.id = finding.id.replace("slither-", "sentinel-static-", 1)
+        finding.source = "sentinel-static"
+        finding.sources = ["sentinel-static"]
+        finding.evidence = [f"experimental sentinel-static:{finding.detector}: {finding.description}"]
     return findings
 
 

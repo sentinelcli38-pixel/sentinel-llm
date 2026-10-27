@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-7d938ebdf335a931",
+  "type": "unchecked-lowlevel",
+  "severity": "medium",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 12
+  },
+  "what_was_observed": "Proxy.proxy(address,bytes) (src/Case.sol#12-15) ignores return value by target.call.value(msg.value)(data) (src/Case.sol#14)\n",
+  "evidence": [
+    "slither:unchecked-lowlevel: Proxy.proxy(address,bytes) (src/Case.sol#12-15) ignores return value by target.call.value(msg.value)(data) (src/Case.sol#14)\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

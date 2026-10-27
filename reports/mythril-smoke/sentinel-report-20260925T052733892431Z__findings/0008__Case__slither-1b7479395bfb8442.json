@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-1b7479395bfb8442",
+  "type": "missing-zero-check",
+  "severity": "low",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 12
+  },
+  "what_was_observed": "Proxy.proxy(address,bytes).target (src/Case.sol#12) lacks a zero-check on :\n\t\t- target.call.value(msg.value)(data) (src/Case.sol#14)\n",
+  "evidence": [
+    "slither:missing-zero-check: Proxy.proxy(address,bytes).target (src/Case.sol#12) lacks a zero-check on :\n\t\t- target.call.value(msg.value)(data) (src/Case.sol#14)\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

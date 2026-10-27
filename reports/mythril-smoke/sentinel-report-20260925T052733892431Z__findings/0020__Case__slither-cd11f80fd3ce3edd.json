@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-cd11f80fd3ce3edd",
+  "type": "external-function",
+  "severity": "optimization",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 12
+  },
+  "what_was_observed": "proxy(address,bytes) should be declared external:\n\t- Proxy.proxy(address,bytes) (src/Case.sol#12-15)\n",
+  "evidence": [
+    "slither:external-function: proxy(address,bytes) should be declared external:\n\t- Proxy.proxy(address,bytes) (src/Case.sol#12-15)\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

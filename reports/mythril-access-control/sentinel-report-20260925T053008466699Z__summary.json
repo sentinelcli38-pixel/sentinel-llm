@@ -1,0 +1,174 @@
+{
+  "outcome": "novelty_review_required",
+  "pipeline": {
+    "scout": "live scanner analysis completed",
+    "red_team": "exploit not confirmed",
+    "blue_team": "no patch proposed",
+    "judge": "not verified"
+  },
+  "findings": [
+    {
+      "type": "arbitrary send eth",
+      "severity": "high",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 18
+      },
+      "what_was_observed": "Phishable.withdrawAll(address) (src/Case.sol#18-22) sends eth to arbitrary user\n\tDangerous calls:\n\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n",
+      "evidence": [
+        "slither:arbitrary-send-eth: Phishable.withdrawAll(address) (src/Case.sol#18-22) sends eth to arbitrary user\n\tDangerous calls:\n\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n"
+      ]
+    },
+    {
+      "type": "SWC 105",
+      "severity": "high",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 21
+      },
+      "what_was_observed": "Unprotected Ether Withdrawal\nAny sender can withdraw Ether from the contract account.\nArbitrary senders other than the contract creator can profitably extract Ether from the contract account. Verify the business logic carefully and make sure that appropriate security controls are in place to prevent unexpected loss of funds.",
+      "evidence": [
+        "mythril:SWC-105: Any sender can withdraw Ether from the contract account.\nArbitrary senders other than the contract creator can profitably extract Ether from the contract account. Verify the business logic carefully and make sure that appropriate security controls are in place to prevent unexpected loss of funds."
+      ]
+    },
+    {
+      "type": "tx origin",
+      "severity": "medium",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 18
+      },
+      "what_was_observed": "Phishable.withdrawAll(address) (src/Case.sol#18-22) uses tx.origin for authorization: require(bool)(tx.origin == owner) (src/Case.sol#20)\n",
+      "evidence": [
+        "slither:tx-origin: Phishable.withdrawAll(address) (src/Case.sol#18-22) uses tx.origin for authorization: require(bool)(tx.origin == owner) (src/Case.sol#20)\n"
+      ]
+    },
+    {
+      "type": "SWC 114",
+      "severity": "medium",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 21
+      },
+      "what_was_observed": "Transaction Order Dependence\nThe value of the call is dependent on balance or storage write\nThis can lead to race conditions. An attacker may be able to run a transaction after our transaction which can change the value of the call",
+      "evidence": [
+        "mythril:SWC-114: The value of the call is dependent on balance or storage write\nThis can lead to race conditions. An attacker may be able to run a transaction after our transaction which can change the value of the call"
+      ]
+    },
+    {
+      "type": "missing zero check",
+      "severity": "low",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 12
+      },
+      "what_was_observed": "Phishable.constructor(address)._owner (src/Case.sol#12) lacks a zero-check on :\n\t\t- owner = _owner (src/Case.sol#13)\n",
+      "evidence": [
+        "slither:missing-zero-check: Phishable.constructor(address)._owner (src/Case.sol#12) lacks a zero-check on :\n\t\t- owner = _owner (src/Case.sol#13)\n"
+      ]
+    },
+    {
+      "type": "missing zero check",
+      "severity": "low",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 18
+      },
+      "what_was_observed": "Phishable.withdrawAll(address)._recipient (src/Case.sol#18) lacks a zero-check on :\n\t\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n",
+      "evidence": [
+        "slither:missing-zero-check: Phishable.withdrawAll(address)._recipient (src/Case.sol#18) lacks a zero-check on :\n\t\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n"
+      ]
+    },
+    {
+      "type": "SWC 115",
+      "severity": "low",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 20
+      },
+      "what_was_observed": "Dependence on tx.origin\nUse of tx.origin as a part of authorization control.\nThe tx.origin environment variable has been found to influence a control flow decision. Note that using tx.origin as a security control might cause a situation where a user inadvertently authorizes a smart contract to perform an action on their behalf. It is recommended to use msg.sender instead.",
+      "evidence": [
+        "mythril:SWC-115: Use of tx.origin as a part of authorization control.\nThe tx.origin environment variable has been found to influence a control flow decision. Note that using tx.origin as a security control might cause a situation where a user inadvertently authorizes a smart contract to perform an action on their behalf. It is recommended to use msg.sender instead."
+      ]
+    },
+    {
+      "type": "solc version",
+      "severity": "informational",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 7
+      },
+      "what_was_observed": "Version constraint ^0.4.22 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- DirtyBytesArrayToStorage\n\t- ABIDecodeTwoDimensionalArrayMemory\n\t- KeccakCaching\n\t- EmptyByteArrayCopy\n\t- DynamicArrayCleanup\n\t- ImplicitConstructorCallvalueCheck\n\t- TupleAssignmentMultiStackSlotComponents\n\t- MemoryArrayCreationOverflow\n\t- privateCanBeOverridden\n\t- SignedArrayStorageCopy\n\t- ABIEncoderV2StorageArrayWithMultiSlotElement\n\t- DynamicConstructorArgumentsClippedABIV2\n\t- UninitializedFunctionPointerInConstructor_0.4.x\n\t- IncorrectEventSignatureInLibraries_0.4.x\n\t- ABIEncoderV2PackedStorage_0.4.x\n\t- ExpExponentCleanup\n\t- EventStructWrongData\n\t- OneOfTwoConstructorsSkipped.\nIt is used by:\n\t- ^0.4.22 (src/Case.sol#7)\n",
+      "evidence": [
+        "slither:solc-version: Version constraint ^0.4.22 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- DirtyBytesArrayToStorage\n\t- ABIDecodeTwoDimensionalArrayMemory\n\t- KeccakCaching\n\t- EmptyByteArrayCopy\n\t- DynamicArrayCleanup\n\t- ImplicitConstructorCallvalueCheck\n\t- TupleAssignmentMultiStackSlotComponents\n\t- MemoryArrayCreationOverflow\n\t- privateCanBeOverridden\n\t- SignedArrayStorageCopy\n\t- ABIEncoderV2StorageArrayWithMultiSlotElement\n\t- DynamicConstructorArgumentsClippedABIV2\n\t- UninitializedFunctionPointerInConstructor_0.4.x\n\t- IncorrectEventSignatureInLibraries_0.4.x\n\t- ABIEncoderV2PackedStorage_0.4.x\n\t- ExpExponentCleanup\n\t- EventStructWrongData\n\t- OneOfTwoConstructorsSkipped.\nIt is used by:\n\t- ^0.4.22 (src/Case.sol#7)\n"
+      ]
+    },
+    {
+      "type": "naming convention",
+      "severity": "informational",
+      "status": "candidate",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 18
+      },
+      "what_was_observed": "Parameter Phishable.withdrawAll(address)._recipient (src/Case.sol#18) is not in mixedCase\n",
+      "evidence": [
+        "slither:naming-convention: Parameter Phishable.withdrawAll(address)._recipient (src/Case.sol#18) is not in mixedCase\n"
+      ]
+    },
+    {
+      "type": "privilege boundary outlier",
+      "severity": "medium",
+      "status": "human_review_required",
+      "location": {
+        "file": "src/Case.sol",
+        "line": 18
+      },
+      "what_was_observed": "This public state-changing function sits beside privileged controls but declares no recognizable access modifier; review the intended authorization model.",
+      "evidence": [
+        "Privileged-control indicators exist in the contract source",
+        "Public/external function has a state-change signal without a recognized modifier",
+        "Source heuristic only; authorization may be enforced internally."
+      ]
+    }
+  ],
+  "unknown_risk_triage": {
+    "method": "deterministic-source-heuristics",
+    "candidate_count": 1,
+    "signal_counts": {
+      "privilege-boundary-outlier": 1
+    },
+    "review_required": true,
+    "scope": "Unknown-risk triage only; no exploitability or safety conclusion."
+  },
+  "reproducibility": {
+    "platform": "macOS-14.5-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7",
+    "llm_provider": "gemini",
+    "scout_model": "gemini-3.5-flash-lite",
+    "red_team_model": "gpt-4o",
+    "blue_team_model": "deepseek-coder:7b",
+    "command_timeout_seconds": 120,
+    "mythril_execution_timeout_seconds": 15,
+    "mythril_transaction_count": 2,
+    "max_retries": 5
+  },
+  "patch": {
+    "purpose": null,
+    "changed_file": null,
+    "patched_solidity_files": []
+  },
+  "verification": {
+    "build_passed": false,
+    "exploit_blocked": false,
+    "regression_passed": false
+  }
+}

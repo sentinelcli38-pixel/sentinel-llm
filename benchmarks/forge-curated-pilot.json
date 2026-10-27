@@ -1,0 +1,40 @@
+{
+  "repository": "https://github.com/shenyimings/FORGE-Curated",
+  "revision": "31923807289517fc4a7dba40c24f6185692c6e7b",
+  "scope": "External compile/readiness pilot. Suggested properties are not accepted ground truth. No automatic CWE-to-SWC mapping or negative labels from absent findings.",
+  "cases": [
+    {
+      "id": "forge-curated-oku-oracleless",
+      "project_root": "dataset-curated/contracts/2024.12.09 - Final - Oku's New Order Types Contract Contest Audit Report.pdf-source/ee3f781a73d65e33fb452c9a44eb1337c5cfdbd6/oku-custom-order-types",
+      "source_root": "contracts",
+      "target_file": "contracts/automatedTrigger/OracleLess.sol",
+      "target_contract": "OracleLess",
+      "vulnerability_class": "reentrancy",
+      "vfp": "flatten/vfp-vuln/vfp_00102.json",
+      "finding_id": 2,
+      "metadata": "dataset-curated/findings/2024.12.09 - Final - Oku's New Order Types Contract Contest Audit Report.json"
+    },
+    {
+      "id": "forge-curated-morpheus-depositpool",
+      "project_root": "dataset-curated/contracts/Morpheus - Zenith Audit Report.pdf-source/SmartContracts",
+      "source_root": "contracts",
+      "target_file": "contracts/capital-protocol/DepositPool.sol",
+      "target_contract": "DepositPool",
+      "vulnerability_class": "reentrancy",
+      "vfp": "flatten/vfp-vuln/vfp_00120.json",
+      "finding_id": 2,
+      "metadata": "dataset-curated/findings/Morpheus - Zenith Audit Report.json"
+    },
+    {
+      "id": "forge-curated-k3-sbold",
+      "project_root": "dataset-curated/contracts/ChainSecurity_K3Capital_SBOLD_Audit.pdf-source/sBOLD",
+      "source_root": "contracts",
+      "target_file": "contracts/sBold.sol",
+      "target_contract": "sBold",
+      "vulnerability_class": "reentrancy",
+      "vfp": "flatten/vfp-vuln/vfp_00297.json",
+      "finding_id": 2,
+      "metadata": "dataset-curated/findings/ChainSecurity_K3Capital_SBOLD_Audit.json"
+    }
+  ]
+}

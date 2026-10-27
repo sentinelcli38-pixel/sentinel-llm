@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "test",
+    "--json",
+    "--match-test",
+    "^testSecurity\\(.*\\)$",
+    "--use",
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--offline",
+    "--threads",
+    "1"
+  ],
+  "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/reentrancy",
+  "duration_seconds": 0.09732529099994736,
+  "exit_code": 1,
+  "stderr": "",
+  "stdout": "{\"test/Security.t.sol:SecurityTest\":{\"duration\":\"326\u00b5s\",\"test_results\":{\"testSecurity()\":{\"status\":\"Failure\",\"reason\":\"victim funds stolen\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":373821}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"176\u00b5s 375ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+  "success": false,
+  "timed_out": false
+}

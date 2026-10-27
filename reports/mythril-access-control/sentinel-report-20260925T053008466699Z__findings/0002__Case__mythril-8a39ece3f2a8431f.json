@@ -1,0 +1,15 @@
+{
+  "finding_id": "mythril-8a39ece3f2a8431f",
+  "type": "SWC-105",
+  "severity": "high",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 21
+  },
+  "what_was_observed": "Unprotected Ether Withdrawal\nAny sender can withdraw Ether from the contract account.\nArbitrary senders other than the contract creator can profitably extract Ether from the contract account. Verify the business logic carefully and make sure that appropriate security controls are in place to prevent unexpected loss of funds.",
+  "evidence": [
+    "mythril:SWC-105: Any sender can withdraw Ether from the contract account.\nArbitrary senders other than the contract creator can profitably extract Ether from the contract account. Verify the business logic carefully and make sure that appropriate security controls are in place to prevent unexpected loss of funds."
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

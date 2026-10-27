@@ -1,4 +1,4 @@
-name: Sentinel security audit
+name: Sentinel reliability checks
 
 on:
   pull_request:
@@ -13,12 +13,28 @@ jobs:
         with:
           python-version: "3.12"
       - uses: foundry-rs/foundry-toolchain@v1
-      - run: python -m pip install '.[dev]'
-      - run: sentinel scan ./examples/vulnerable_reentrancy --mock --output ./reports
-      - name: Export SARIF and evaluate release policy
-        run: |
-          ledger=$(find reports -name 'sentinel-report-*.json' | head -1)
-          sentinel gate "$ledger" --sarif reports/sentinel.sarif
-      - uses: github/codeql-action/upload-sarif@v3
+      - uses: actions/setup-node@v4
         with:
-          sarif_file: reports/sentinel.sarif
+          node-version: "22"
+      - run: python -m pip install '.[dev]' solc-select
+      - run: solc-select install 0.8.20
+      - run: python -m ruff check sentinel training tests
+      - run: python -m pytest -q
+      - run: node --test tests/frontend/dashboard.test.cjs
+      - name: Verify reviewed fixture workflow
+        run: SOLC_BINARY="$HOME/.solc-select/artifacts/solc-0.8.20/solc-0.8.20" sentinel scan ./examples/vulnerable_reentrancy --mock --output ./reports
+      - name: Assert demo cannot pass a release gate and export SARIF
+        run: |
+          ledger=$(find reports -maxdepth 1 -name 'sentinel-report-*.json' ! -name '*__summary.json' | sort | tail -1)
+          if sentinel gate "$ledger" --sarif reports/sentinel.sarif; then
+            echo "ERROR: a mock fixture must not approve a security release"
+            exit 1
+          else
+            status=$?
+            test "$status" -eq 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sentinel-fixture-evidence
+          path: reports/

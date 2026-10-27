@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-f51b564636f8582f",
+  "type": "arbitrary-send-eth",
+  "severity": "high",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 18
+  },
+  "what_was_observed": "Phishable.withdrawAll(address) (src/Case.sol#18-22) sends eth to arbitrary user\n\tDangerous calls:\n\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n",
+  "evidence": [
+    "slither:arbitrary-send-eth: Phishable.withdrawAll(address) (src/Case.sol#18-22) sends eth to arbitrary user\n\tDangerous calls:\n\t- _recipient.transfer(this.balance) (src/Case.sol#21)\n"
+  ],
+  "pipeline_status": "selected_for_agentic_validation",
+  "patch_file": null
+}

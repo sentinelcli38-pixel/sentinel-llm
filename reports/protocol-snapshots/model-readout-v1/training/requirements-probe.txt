@@ -1,0 +1,2 @@
+# Optional frozen-model readout experiment, isolated from production dependencies.
+scikit-learn==1.7.2

@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "build",
+    "--use",
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--offline",
+    "--threads",
+    "1"
+  ],
+  "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/access-control-controls/invalid_patch",
+  "duration_seconds": 0.06689466599999605,
+  "exit_code": 1,
+  "stderr": "Error: Compiler run failed:\nError (2314): Expected identifier but got '{'\n  --> src/VulnerableTreasury.sol:17:10:\n   |\n17 | contract {\n   |          ^\n",
+  "stdout": "Compiling 5 files with Solc 0.8.20\nSolc 0.8.20 finished in 4.77ms\n",
+  "success": false,
+  "timed_out": false
+}

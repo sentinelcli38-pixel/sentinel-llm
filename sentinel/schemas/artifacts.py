@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 from sentinel.schemas.execution import ExecutionResult
@@ -11,6 +13,7 @@ class ExploitArtifact(BaseModel):
     rationale: str
     execution: ExecutionResult | None = None
     confirmed: bool = False
+    origin: Literal["unreviewed", "reviewed_fixture", "model_generated"] = "unreviewed"
 
 
 class PatchArtifact(BaseModel):

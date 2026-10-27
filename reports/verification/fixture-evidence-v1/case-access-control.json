@@ -1,0 +1,191 @@
+{
+  "audit_passed": false,
+  "case_id": "access-control",
+  "cohort": "existing_demonstration_fixture",
+  "confirmed": true,
+  "controls": [],
+  "error": "ValueError: '/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/access-control/test/SentinelExploit_41b6c646ec811ebf.t.sol' is not in the subpath of '/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/access-control'",
+  "repair_verified": false,
+  "runtime_state": {
+    "aderyn_result": null,
+    "alerts": [],
+    "analyzer_runs": [],
+    "ast_context": {},
+    "baseline_exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_41b6c646ec811ebf.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/access-control",
+      "duration_seconds": 0.10460341700002118,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_41b6c646ec811ebf.t.sol:ExploitTest\":{\"duration\":\"433\u00b5s 750ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":37168}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"109\u00b5s 875ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "baseline_regression_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--no-match-test",
+        "^testExploit\\(.*\\)$",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/access-control",
+      "duration_seconds": 0.1092617080000764,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"303\u00b5s 83ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":70286}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"137\u00b5s 417ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Treasury.t.sol:TreasuryTest\":{\"duration\":\"71\u00b5s 458ns\",\"test_results\":{\"testOwnerIsRecorded()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":7855}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"12\u00b5s 667ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "candidate_id": "heuristic-access-control",
+    "compilation_result": null,
+    "compiler_info": {},
+    "enabled_analyzers": [
+      "slither",
+      "mythril"
+    ],
+    "experiment_profile": "sentinel-full",
+    "exploit_artifact": {
+      "confirmed": true,
+      "execution": {
+        "command": [
+          "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+          "test",
+          "--json",
+          "--match-test",
+          "^testExploit\\(.*\\)$",
+          "--match-path",
+          "test/SentinelExploit_41b6c646ec811ebf.t.sol",
+          "--use",
+          "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+          "--offline",
+          "--threads",
+          "1"
+        ],
+        "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/access-control",
+        "duration_seconds": 0.10460341700002118,
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\"test/SentinelExploit_41b6c646ec811ebf.t.sol:ExploitTest\":{\"duration\":\"433\u00b5s 750ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":37168}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"109\u00b5s 875ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+        "success": true,
+        "timed_out": false
+      },
+      "origin": "reviewed_fixture",
+      "rationale": "The PoC is restricted to the target Foundry project and testExploit.",
+      "source": "pragma solidity ^0.8.20;\n\nimport \"../src/VulnerableTreasury.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; function prank(address sender) external; }\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    VulnerableTreasury private treasury;\n    address private constant attacker = address(0xA11CE);\n    function setUp() public {\n        vm.deal(address(this), 1 ether);\n        treasury = new VulnerableTreasury{value: 1 ether}();\n    }\n    function testExploit() public {\n        vm.prank(attacker);\n        treasury.sweep(payable(attacker));\n        require(address(treasury).balance == 0, \"unauthorized sweep was blocked\");\n    }\n}\n",
+      "test_file": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/access-control/test/SentinelExploit_41b6c646ec811ebf.t.sol",
+      "test_name": "testExploit",
+      "vulnerability_id": "heuristic-access-control"
+    },
+    "exploit_confirmed": true,
+    "exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_41b6c646ec811ebf.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/access-control",
+      "duration_seconds": 0.10460341700002118,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_41b6c646ec811ebf.t.sol:ExploitTest\":{\"duration\":\"433\u00b5s 750ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":37168}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"109\u00b5s 875ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "exploit_source": "pragma solidity ^0.8.20;\n\nimport \"../src/VulnerableTreasury.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; function prank(address sender) external; }\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    VulnerableTreasury private treasury;\n    address private constant attacker = address(0xA11CE);\n    function setUp() public {\n        vm.deal(address(this), 1 ether);\n        treasury = new VulnerableTreasury{value: 1 ether}();\n    }\n    function testExploit() public {\n        vm.prank(attacker);\n        treasury.sweep(payable(attacker));\n        require(address(treasury).balance == 0, \"unauthorized sweep was blocked\");\n    }\n}\n",
+    "feedback": [],
+    "final_report_path": null,
+    "final_verification_state": "not_started",
+    "findings": [
+      {
+        "confidence": "unknown",
+        "confidence_score": 0.0,
+        "contract": "",
+        "description": "Existing local demonstration, not a new discovery",
+        "detector": "reviewed-fixture",
+        "evidence": [],
+        "file": "src/VulnerableTreasury.sol",
+        "function": "",
+        "id": "heuristic-access-control",
+        "line": null,
+        "raw_output": "",
+        "semantic_context": "",
+        "severity": "unknown",
+        "source": "local-heuristic",
+        "sources": [],
+        "status": "confirmed"
+      }
+    ],
+    "gas_metrics": {},
+    "judge_result": null,
+    "max_retries": 5,
+    "mock_mode": false,
+    "mythril_results": [],
+    "natspec_context": {},
+    "novelty_assessment": {},
+    "oracle_test_hashes": {
+      "test/Exploit_heuristic-access-control.t.sol": "f4108c758ad8bf28689cd01d55aeebbb8bf42732a1287f6483f87a9f709127a2",
+      "test/Functional.t.sol": "5731f8d183d38fd12f1f2d94a5f28d7ea79e60b94dfe421308eb5197d53b13d9",
+      "test/SentinelExploit_41b6c646ec811ebf.t.sol": "25e21228ea0e5d6bc8da7670ba3f795137f0e5bc6e5dd9a3e39796f9c6610427",
+      "test/Treasury.t.sol": "6d4d54926bfc8a792dc21efabb5a80295fd289c7cc716cda7bcd465e72d40d6e"
+    },
+    "original_source": {
+      "src/VulnerableTreasury.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable local access-control demonstration.\ncontract VulnerableTreasury {\n    address public owner;\n\n    constructor() payable {\n        owner = msg.sender;\n    }\n\n    function sweep(address payable recipient) external {\n        recipient.transfer(address(this).balance);\n    }\n}\n"
+    },
+    "patch_artifact": {
+      "attempt": 1,
+      "modified_lines": [],
+      "original_file": "src/VulnerableTreasury.sol",
+      "patch": "--- src/VulnerableTreasury.sol\n+++ src/VulnerableTreasury.sol\n@@ -9,6 +9,7 @@\n     }\n \n     function sweep(address payable recipient) external {\n+        require(msg.sender == owner, \"not owner\");\n         recipient.transfer(address(this).balance);\n     }\n }\n",
+      "rationale": "Only the vulnerable state-update/authorization region was changed.",
+      "vulnerability_id": "heuristic-access-control"
+    },
+    "patch_diff": "--- src/VulnerableTreasury.sol\n+++ src/VulnerableTreasury.sol\n@@ -9,6 +9,7 @@\n     }\n \n     function sweep(address payable recipient) external {\n+        require(msg.sender == owner, \"not owner\");\n         recipient.transfer(address(this).balance);\n     }\n }\n",
+    "patched_source": {
+      "src/VulnerableTreasury.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable local access-control demonstration.\ncontract VulnerableTreasury {\n    address public owner;\n\n    constructor() payable {\n        owner = msg.sender;\n    }\n\n    function sweep(address payable recipient) external {\n        require(msg.sender == owner, \"not owner\");\n        recipient.transfer(address(this).balance);\n    }\n}\n"
+    },
+    "project_path": "/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/access-control",
+    "protocol_map": {},
+    "regression_result": null,
+    "report_artifacts": [],
+    "reproducibility": {},
+    "retry_count": 0,
+    "retry_history": [],
+    "risk_assessment": {},
+    "scout_only": false,
+    "scout_results": [],
+    "slither_result": null,
+    "source_files": [
+      "src/VulnerableTreasury.sol"
+    ],
+    "workspace_path": null
+  },
+  "security_transition": false
+}

@@ -1,0 +1,12 @@
+--- a/src/UncheckedCallWallet.sol
++++ b/src/UncheckedCallWallet.sol
+@@ -10,7 +10,8 @@
+ 
+     function withdraw(address payable recipient) external {
+         uint256 amount = balances[msg.sender];
+-        recipient.call{value: amount}(""); // unchecked low-level call
++        (bool sent,) = recipient.call{value: amount}("");
++        require(sent, "send failed");
+         balances[msg.sender] = 0;
+     }
+ }

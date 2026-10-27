@@ -1,0 +1,10 @@
+--- a/src/VulnerableTreasury.sol
++++ b/src/VulnerableTreasury.sol
+@@ -9,6 +9,7 @@
+     }
+ 
+     function sweep(address payable recipient) external {
++        require(msg.sender == owner, "not owner");
+         recipient.transfer(address(this).balance);
+     }
+ }

@@ -18,9 +18,9 @@ def test_policy_blocks_high_unverified_findings() -> None:
     assert decision.status == "blocked"
 
 
-def test_policy_allows_discarded_findings() -> None:
+def test_policy_does_not_clear_warnings_after_a_failed_poc() -> None:
     state = RuntimeState(project_path="/project", findings=[finding(FindingStatus.DISCARDED)])
-    assert evaluate_policy(state, {"block_severity": "high"}).status == "passed"
+    assert evaluate_policy(state, {"block_severity": "high"}).status == "blocked"
 
 
 def test_sarif_and_protocol_map_preserve_source_evidence() -> None:

@@ -1,0 +1,15 @@
+# Case: privilege-boundary-outlier
+
+- **Severity:** medium
+- **Location:** `src/Case.sol:18`
+
+## Observation
+This public state-changing function sits beside privileged controls but declares no recognizable access modifier; review the intended authorization model.
+
+## Evidence
+- Privileged-control indicators exist in the contract source
+- Public/external function has a state-change signal without a recognized modifier
+- Source heuristic only; authorization may be enforced internally.
+
+## Status
+Scout candidate; no exploit or patch has been approved yet.

@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-f4738cf4a1f8865f",
+  "type": "missing-zero-check",
+  "severity": "low",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 11
+  },
+  "what_was_observed": "Proxy.transferOwner(address)._owner (src/Case.sol#11) lacks a zero-check on :\n\t\t- Owner = _owner (src/Case.sol#11)\n",
+  "evidence": [
+    "slither:missing-zero-check: Proxy.transferOwner(address)._owner (src/Case.sol#11) lacks a zero-check on :\n\t\t- Owner = _owner (src/Case.sol#11)\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

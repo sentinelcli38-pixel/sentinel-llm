@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-4a6784d1e5416b27",
+  "type": "incorrect-modifier",
+  "severity": "low",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 10
+  },
+  "what_was_observed": "Modifier Proxy.onlyOwner() (src/Case.sol#10) does not always execute _; or revert\n",
+  "evidence": [
+    "slither:incorrect-modifier: Modifier Proxy.onlyOwner() (src/Case.sol#10) does not always execute _; or revert\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

@@ -1,0 +1,190 @@
+{
+  "audit_passed": false,
+  "case_id": "unchecked-call",
+  "cohort": "existing_demonstration_fixture",
+  "confirmed": true,
+  "controls": [],
+  "error": "ValueError: '/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/unchecked-call/test/SentinelExploit_248a5b621d974236.t.sol' is not in the subpath of '/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/unchecked-call'",
+  "repair_verified": false,
+  "runtime_state": {
+    "aderyn_result": null,
+    "alerts": [],
+    "analyzer_runs": [],
+    "ast_context": {},
+    "baseline_exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_248a5b621d974236.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/unchecked-call",
+      "duration_seconds": 0.09153812500005643,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_248a5b621d974236.t.sol:ExploitTest\":{\"duration\":\"312\u00b5s 750ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":98881}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"70\u00b5s 208ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "baseline_regression_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--no-match-test",
+        "^testExploit\\(.*\\)$",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/unchecked-call",
+      "duration_seconds": 0.10084283300000152,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"334\u00b5s 916ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":158727}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"167\u00b5s 208ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Wallet.t.sol:WalletTest\":{\"duration\":\"73\u00b5s 917ns\",\"test_results\":{\"testDeposit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":30960}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"43\u00b5s 417ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "candidate_id": "heuristic-unchecked-call",
+    "compilation_result": null,
+    "compiler_info": {},
+    "enabled_analyzers": [
+      "slither",
+      "mythril"
+    ],
+    "experiment_profile": "sentinel-full",
+    "exploit_artifact": {
+      "confirmed": true,
+      "execution": {
+        "command": [
+          "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+          "test",
+          "--json",
+          "--match-test",
+          "^testExploit\\(.*\\)$",
+          "--match-path",
+          "test/SentinelExploit_248a5b621d974236.t.sol",
+          "--use",
+          "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+          "--offline",
+          "--threads",
+          "1"
+        ],
+        "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/unchecked-call",
+        "duration_seconds": 0.09153812500005643,
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\"test/SentinelExploit_248a5b621d974236.t.sol:ExploitTest\":{\"duration\":\"312\u00b5s 750ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":98881}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"70\u00b5s 208ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+        "success": true,
+        "timed_out": false
+      },
+      "origin": "reviewed_fixture",
+      "rationale": "The PoC is restricted to the target Foundry project and testExploit.",
+      "source": "pragma solidity ^0.8.20;\n\nimport \"../src/UncheckedCallWallet.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; }\n\ncontract RejectingRecipient { receive() external payable { revert(\"reject payment\"); } }\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    UncheckedCallWallet private wallet;\n    RejectingRecipient private recipient;\n    function setUp() public {\n        vm.deal(address(this), 1 ether);\n        wallet = new UncheckedCallWallet();\n        recipient = new RejectingRecipient();\n    }\n    function testExploit() public {\n        wallet.deposit{value: 1 ether}();\n        wallet.withdraw(payable(address(recipient)));\n        require(wallet.balances(address(this)) == 0, \"unchecked call did not lose accounting credit\");\n        require(address(wallet).balance == 1 ether, \"recipient unexpectedly received funds\");\n    }\n}\n",
+      "test_file": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/unchecked-call/test/SentinelExploit_248a5b621d974236.t.sol",
+      "test_name": "testExploit",
+      "vulnerability_id": "heuristic-unchecked-call"
+    },
+    "exploit_confirmed": true,
+    "exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_248a5b621d974236.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/unchecked-call",
+      "duration_seconds": 0.09153812500005643,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_248a5b621d974236.t.sol:ExploitTest\":{\"duration\":\"312\u00b5s 750ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":98881}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"70\u00b5s 208ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "exploit_source": "pragma solidity ^0.8.20;\n\nimport \"../src/UncheckedCallWallet.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; }\n\ncontract RejectingRecipient { receive() external payable { revert(\"reject payment\"); } }\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    UncheckedCallWallet private wallet;\n    RejectingRecipient private recipient;\n    function setUp() public {\n        vm.deal(address(this), 1 ether);\n        wallet = new UncheckedCallWallet();\n        recipient = new RejectingRecipient();\n    }\n    function testExploit() public {\n        wallet.deposit{value: 1 ether}();\n        wallet.withdraw(payable(address(recipient)));\n        require(wallet.balances(address(this)) == 0, \"unchecked call did not lose accounting credit\");\n        require(address(wallet).balance == 1 ether, \"recipient unexpectedly received funds\");\n    }\n}\n",
+    "feedback": [],
+    "final_report_path": null,
+    "final_verification_state": "not_started",
+    "findings": [
+      {
+        "confidence": "unknown",
+        "confidence_score": 0.0,
+        "contract": "",
+        "description": "Existing local demonstration, not a new discovery",
+        "detector": "reviewed-fixture",
+        "evidence": [],
+        "file": "src/UncheckedCallWallet.sol",
+        "function": "",
+        "id": "heuristic-unchecked-call",
+        "line": null,
+        "raw_output": "",
+        "semantic_context": "",
+        "severity": "unknown",
+        "source": "local-heuristic",
+        "sources": [],
+        "status": "confirmed"
+      }
+    ],
+    "gas_metrics": {},
+    "judge_result": null,
+    "max_retries": 5,
+    "mock_mode": false,
+    "mythril_results": [],
+    "natspec_context": {},
+    "novelty_assessment": {},
+    "oracle_test_hashes": {
+      "test/Functional.t.sol": "71b342e2c2acee6585f0ee27867f870788eec081d07112193d3b9ec7adca8ab1",
+      "test/SentinelExploit_248a5b621d974236.t.sol": "9bec1ba367ab0168ef6a4a996c4fe7669b9d90a9c8e9f873be0021ba37651c59",
+      "test/Wallet.t.sol": "db0cef65ffdcdad1482b1adc40acbcad65f2571fef598dd2b48ca4a147231c5b"
+    },
+    "original_source": {
+      "src/UncheckedCallWallet.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable: failed payment clears the caller's accounting credit.\ncontract UncheckedCallWallet {\n    mapping(address => uint256) public balances;\n\n    function deposit() external payable {\n        balances[msg.sender] += msg.value;\n    }\n\n    function withdraw(address payable recipient) external {\n        uint256 amount = balances[msg.sender];\n        recipient.call{value: amount}(\"\"); // unchecked low-level call\n        balances[msg.sender] = 0;\n    }\n}\n"
+    },
+    "patch_artifact": {
+      "attempt": 1,
+      "modified_lines": [],
+      "original_file": "src/UncheckedCallWallet.sol",
+      "patch": "--- src/UncheckedCallWallet.sol\n+++ src/UncheckedCallWallet.sol\n@@ -10,7 +10,8 @@\n \n     function withdraw(address payable recipient) external {\n         uint256 amount = balances[msg.sender];\n-        recipient.call{value: amount}(\"\"); // unchecked low-level call\n+        (bool sent,) = recipient.call{value: amount}(\"\");\n+        require(sent, \"send failed\");\n         balances[msg.sender] = 0;\n     }\n }\n",
+      "rationale": "Only the vulnerable state-update/authorization region was changed.",
+      "vulnerability_id": "heuristic-unchecked-call"
+    },
+    "patch_diff": "--- src/UncheckedCallWallet.sol\n+++ src/UncheckedCallWallet.sol\n@@ -10,7 +10,8 @@\n \n     function withdraw(address payable recipient) external {\n         uint256 amount = balances[msg.sender];\n-        recipient.call{value: amount}(\"\"); // unchecked low-level call\n+        (bool sent,) = recipient.call{value: amount}(\"\");\n+        require(sent, \"send failed\");\n         balances[msg.sender] = 0;\n     }\n }\n",
+    "patched_source": {
+      "src/UncheckedCallWallet.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable: failed payment clears the caller's accounting credit.\ncontract UncheckedCallWallet {\n    mapping(address => uint256) public balances;\n\n    function deposit() external payable {\n        balances[msg.sender] += msg.value;\n    }\n\n    function withdraw(address payable recipient) external {\n        uint256 amount = balances[msg.sender];\n        (bool sent,) = recipient.call{value: amount}(\"\");\n        require(sent, \"send failed\");\n        balances[msg.sender] = 0;\n    }\n}\n"
+    },
+    "project_path": "/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/unchecked-call",
+    "protocol_map": {},
+    "regression_result": null,
+    "report_artifacts": [],
+    "reproducibility": {},
+    "retry_count": 0,
+    "retry_history": [],
+    "risk_assessment": {},
+    "scout_only": false,
+    "scout_results": [],
+    "slither_result": null,
+    "source_files": [
+      "src/UncheckedCallWallet.sol"
+    ],
+    "workspace_path": null
+  },
+  "security_transition": false
+}

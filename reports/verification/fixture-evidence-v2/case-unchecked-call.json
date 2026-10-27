@@ -1,0 +1,394 @@
+{
+  "artifact_sha256": {
+    "foundry.toml": "9eb031154b7b0a3c0bb0c8114057108c00b4d8dca8e34c0808697307471f77dc",
+    "original.sol": "038123d372217f46f038e9a130290c504801d30f73ccb6b2799a159366899bbd",
+    "repair.diff": "8c34550481a8f4e89676a101f3d91a28b97612fce131eeae96a8bcd6a70a8049",
+    "src/UncheckedCallWallet.sol": "aefa9495d73fa6ed382b3198b67369b65faee5f6d1981c84b5d395aaa5d5077c",
+    "test/Functional.t.sol": "71b342e2c2acee6585f0ee27867f870788eec081d07112193d3b9ec7adca8ab1",
+    "test/Security.t.sol": "0ee248a8f7417df2f62a78e089199a6b883b8fd1e4e1f5b24ccd122c4655a65f",
+    "test/SentinelExploit_248a5b621d974236.t.sol": "9bec1ba367ab0168ef6a4a996c4fe7669b9d90a9c8e9f873be0021ba37651c59",
+    "test/Wallet.t.sol": "db0cef65ffdcdad1482b1adc40acbcad65f2571fef598dd2b48ca4a147231c5b"
+  },
+  "audit_passed": true,
+  "case_id": "unchecked-call",
+  "cohort": "existing_demonstration_fixture",
+  "confirmed": true,
+  "controls": [
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "missing or changed baseline evidence",
+        "feedback": "A reviewed, unchanged exploit oracle, confirmed baseline, nonempty passing regression suite, and actual source patch are required.",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "unchanged_patch",
+      "state": "human_review_required",
+      "synthetic_result_injection": false
+    },
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "missing or changed baseline evidence",
+        "feedback": "A reviewed, unchanged exploit oracle, confirmed baseline, nonempty passing regression suite, and actual source patch are required.",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "altered_oracle",
+      "state": "human_review_required",
+      "synthetic_result_injection": false
+    },
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "missing or changed baseline evidence",
+        "feedback": "A reviewed, unchanged exploit oracle, confirmed baseline, nonempty passing regression suite, and actual source patch are required.",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "missing_regression",
+      "state": "human_review_required",
+      "synthetic_result_injection": false
+    },
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "missing or changed baseline evidence",
+        "feedback": "A reviewed, unchanged exploit oracle, confirmed baseline, nonempty passing regression suite, and actual source patch are required.",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "empty_regression",
+      "state": "human_review_required",
+      "synthetic_result_injection": true
+    },
+    {
+      "accepted": false,
+      "judge": {
+        "abi_compatible": null,
+        "additional_checks": [],
+        "build_passed": false,
+        "evidence_version": 0,
+        "exploit_neutralized": false,
+        "failure_reason": "forge build failed",
+        "feedback": "Error: Compiler run failed:\nError (2314): Expected identifier but got '{'\n  --> src/UncheckedCallWallet.sol:19:10:\n   |\n19 | contract {\n   |          ^\n",
+        "positive_tests_passed": null,
+        "regression_passed": false,
+        "security_tests_passed": null,
+        "storage_layout_compatible": null,
+        "verified": false
+      },
+      "name": "invalid_patch",
+      "state": "retry_required",
+      "synthetic_result_injection": false
+    }
+  ],
+  "error": null,
+  "functional_passed": true,
+  "repair_verified": true,
+  "runtime_state": {
+    "aderyn_result": null,
+    "alerts": [],
+    "analyzer_runs": [],
+    "ast_context": {},
+    "baseline_exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_248a5b621d974236.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+      "duration_seconds": 0.096488958000009,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_248a5b621d974236.t.sol:ExploitTest\":{\"duration\":\"322\u00b5s 875ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":98881}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"70\u00b5s 125ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "baseline_regression_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--no-match-test",
+        "^testExploit\\(.*\\)$",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+      "duration_seconds": 0.10097204199996668,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"333\u00b5s 417ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":158727}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"165\u00b5s 166ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Wallet.t.sol:WalletTest\":{\"duration\":\"73\u00b5s 959ns\",\"test_results\":{\"testDeposit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":30960}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"43\u00b5s 792ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "candidate_id": "heuristic-unchecked-call",
+    "compilation_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "build",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+      "duration_seconds": 0.07619850000003225,
+      "exit_code": 0,
+      "stderr": "warning[arbitrary-send-eth]: ETH is sent to a user-controlled destination; restrict the destination or the caller\n   \u256d\u25b8 src/UncheckedCallWallet.sol:13:24\n   \u2502\n13 \u2502         (bool sent,) = recipient.call{value: amount}(\"\");\n   \u2502                        \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n   \u2502\n   \u2570 help: https://getfoundry.sh/forge/linting/arbitrary-send-eth\n\nwarning[reentrancy-eth]: uncapped ETH transfer can be reentered before `balances` is updated\n   \u256d\u25b8 src/UncheckedCallWallet.sol:13:24\n   \u2502\n13 \u2502         (bool sent,) = recipient.call{value: amount}(\"\");\n   \u2502                        \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n   \u2502\n   \u2570 help: https://getfoundry.sh/forge/linting/reentrancy-eth\n\nwarning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check\n   \u256d\u25b8 src/UncheckedCallWallet.sol:11:23\n   \u2502\n11 \u2502     function withdraw(address payable recipient) external {\n   \u2502                       \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n   \u2502\n   \u2570 help: https://getfoundry.sh/forge/linting/missing-zero-check\n\n",
+      "stdout": "Compiling 1 files with Solc 0.8.20\nSolc 0.8.20 finished in 11.51ms\nCompiler run successful!\n",
+      "success": true,
+      "timed_out": false
+    },
+    "compiler_info": {},
+    "enabled_analyzers": [
+      "slither",
+      "mythril"
+    ],
+    "experiment_profile": "sentinel-full",
+    "exploit_artifact": {
+      "confirmed": true,
+      "execution": {
+        "command": [
+          "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+          "test",
+          "--json",
+          "--match-test",
+          "^testExploit\\(.*\\)$",
+          "--match-path",
+          "test/SentinelExploit_248a5b621d974236.t.sol",
+          "--use",
+          "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+          "--offline",
+          "--threads",
+          "1"
+        ],
+        "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+        "duration_seconds": 0.096488958000009,
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\"test/SentinelExploit_248a5b621d974236.t.sol:ExploitTest\":{\"duration\":\"322\u00b5s 875ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":98881}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"70\u00b5s 125ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+        "success": true,
+        "timed_out": false
+      },
+      "origin": "reviewed_fixture",
+      "rationale": "The PoC is restricted to the target Foundry project and testExploit.",
+      "source": "pragma solidity ^0.8.20;\n\nimport \"../src/UncheckedCallWallet.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; }\n\ncontract RejectingRecipient { receive() external payable { revert(\"reject payment\"); } }\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    UncheckedCallWallet private wallet;\n    RejectingRecipient private recipient;\n    function setUp() public {\n        vm.deal(address(this), 1 ether);\n        wallet = new UncheckedCallWallet();\n        recipient = new RejectingRecipient();\n    }\n    function testExploit() public {\n        wallet.deposit{value: 1 ether}();\n        wallet.withdraw(payable(address(recipient)));\n        require(wallet.balances(address(this)) == 0, \"unchecked call did not lose accounting credit\");\n        require(address(wallet).balance == 1 ether, \"recipient unexpectedly received funds\");\n    }\n}\n",
+      "test_file": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call/test/SentinelExploit_248a5b621d974236.t.sol",
+      "test_name": "testExploit",
+      "vulnerability_id": "heuristic-unchecked-call"
+    },
+    "exploit_confirmed": true,
+    "exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_248a5b621d974236.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+      "duration_seconds": 0.0675811250000038,
+      "exit_code": 1,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_248a5b621d974236.t.sol:ExploitTest\":{\"duration\":\"315\u00b5s 667ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Failure\",\"reason\":\"send failed\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":92608}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"62\u00b5s 625ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": false,
+      "timed_out": false
+    },
+    "exploit_source": "pragma solidity ^0.8.20;\n\nimport \"../src/UncheckedCallWallet.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; }\n\ncontract RejectingRecipient { receive() external payable { revert(\"reject payment\"); } }\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    UncheckedCallWallet private wallet;\n    RejectingRecipient private recipient;\n    function setUp() public {\n        vm.deal(address(this), 1 ether);\n        wallet = new UncheckedCallWallet();\n        recipient = new RejectingRecipient();\n    }\n    function testExploit() public {\n        wallet.deposit{value: 1 ether}();\n        wallet.withdraw(payable(address(recipient)));\n        require(wallet.balances(address(this)) == 0, \"unchecked call did not lose accounting credit\");\n        require(address(wallet).balance == 1 ether, \"recipient unexpectedly received funds\");\n    }\n}\n",
+    "feedback": [],
+    "final_report_path": null,
+    "final_verification_state": "verified",
+    "findings": [
+      {
+        "confidence": "unknown",
+        "confidence_score": 0.0,
+        "contract": "",
+        "description": "Existing local demonstration, not a new discovery",
+        "detector": "reviewed-fixture",
+        "evidence": [],
+        "file": "src/UncheckedCallWallet.sol",
+        "function": "",
+        "id": "heuristic-unchecked-call",
+        "line": null,
+        "raw_output": "",
+        "semantic_context": "",
+        "severity": "unknown",
+        "source": "local-heuristic",
+        "sources": [],
+        "status": "confirmed"
+      }
+    ],
+    "gas_metrics": {},
+    "judge_result": {
+      "abi_compatible": null,
+      "additional_checks": [],
+      "build_passed": true,
+      "evidence_version": 1,
+      "exploit_neutralized": true,
+      "failure_reason": "",
+      "feedback": "{\"test/SentinelExploit_248a5b621d974236.t.sol:ExploitTest\":{\"duration\":\"315\u00b5s 667ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Failure\",\"reason\":\"send failed\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":92608}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"62\u00b5s 625ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"326\u00b5s 250ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":158751}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"162\u00b5s 625ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Wallet.t.sol:WalletTest\":{\"duration\":\"74\u00b5s 458ns\",\"test_results\":{\"testDeposit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":30960}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"43\u00b5s 708ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "positive_tests_passed": null,
+      "regression_passed": true,
+      "security_tests_passed": null,
+      "storage_layout_compatible": null,
+      "verified": true
+    },
+    "max_retries": 5,
+    "mock_mode": false,
+    "mythril_results": [],
+    "natspec_context": {},
+    "novelty_assessment": {},
+    "oracle_test_hashes": {
+      "test/Functional.t.sol": "71b342e2c2acee6585f0ee27867f870788eec081d07112193d3b9ec7adca8ab1",
+      "test/SentinelExploit_248a5b621d974236.t.sol": "9bec1ba367ab0168ef6a4a996c4fe7669b9d90a9c8e9f873be0021ba37651c59",
+      "test/Wallet.t.sol": "db0cef65ffdcdad1482b1adc40acbcad65f2571fef598dd2b48ca4a147231c5b"
+    },
+    "original_source": {
+      "src/UncheckedCallWallet.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable: failed payment clears the caller's accounting credit.\ncontract UncheckedCallWallet {\n    mapping(address => uint256) public balances;\n\n    function deposit() external payable {\n        balances[msg.sender] += msg.value;\n    }\n\n    function withdraw(address payable recipient) external {\n        uint256 amount = balances[msg.sender];\n        recipient.call{value: amount}(\"\"); // unchecked low-level call\n        balances[msg.sender] = 0;\n    }\n}\n"
+    },
+    "patch_artifact": {
+      "attempt": 1,
+      "modified_lines": [],
+      "original_file": "src/UncheckedCallWallet.sol",
+      "patch": "--- src/UncheckedCallWallet.sol\n+++ src/UncheckedCallWallet.sol\n@@ -10,7 +10,8 @@\n \n     function withdraw(address payable recipient) external {\n         uint256 amount = balances[msg.sender];\n-        recipient.call{value: amount}(\"\"); // unchecked low-level call\n+        (bool sent,) = recipient.call{value: amount}(\"\");\n+        require(sent, \"send failed\");\n         balances[msg.sender] = 0;\n     }\n }\n",
+      "rationale": "Only the vulnerable state-update/authorization region was changed.",
+      "vulnerability_id": "heuristic-unchecked-call"
+    },
+    "patch_diff": "--- src/UncheckedCallWallet.sol\n+++ src/UncheckedCallWallet.sol\n@@ -10,7 +10,8 @@\n \n     function withdraw(address payable recipient) external {\n         uint256 amount = balances[msg.sender];\n-        recipient.call{value: amount}(\"\"); // unchecked low-level call\n+        (bool sent,) = recipient.call{value: amount}(\"\");\n+        require(sent, \"send failed\");\n         balances[msg.sender] = 0;\n     }\n }\n",
+    "patched_source": {
+      "src/UncheckedCallWallet.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable: failed payment clears the caller's accounting credit.\ncontract UncheckedCallWallet {\n    mapping(address => uint256) public balances;\n\n    function deposit() external payable {\n        balances[msg.sender] += msg.value;\n    }\n\n    function withdraw(address payable recipient) external {\n        uint256 amount = balances[msg.sender];\n        (bool sent,) = recipient.call{value: amount}(\"\");\n        require(sent, \"send failed\");\n        balances[msg.sender] = 0;\n    }\n}\n"
+    },
+    "project_path": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+    "protocol_map": {},
+    "regression_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--no-match-test",
+        "^testExploit\\(.*\\)$",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+      "duration_seconds": 0.06572370800000726,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"326\u00b5s 250ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":158751}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"162\u00b5s 625ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Wallet.t.sol:WalletTest\":{\"duration\":\"74\u00b5s 458ns\",\"test_results\":{\"testDeposit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":30960}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"43\u00b5s 708ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "report_artifacts": [],
+    "reproducibility": {},
+    "retry_count": 0,
+    "retry_history": [],
+    "risk_assessment": {},
+    "scout_only": false,
+    "scout_results": [],
+    "slither_result": null,
+    "source_files": [
+      "src/UncheckedCallWallet.sol"
+    ],
+    "workspace_path": null
+  },
+  "security_after": {
+    "command": [
+      "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+      "test",
+      "--json",
+      "--match-test",
+      "^testSecurity\\(.*\\)$",
+      "--use",
+      "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+      "--offline",
+      "--threads",
+      "1"
+    ],
+    "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+    "duration_seconds": 0.08796941700001071,
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"test/Security.t.sol:SecurityTest\":{\"duration\":\"317\u00b5s 667ns\",\"test_results\":{\"testSecurity()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":235362}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"168\u00b5s 375ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+    "success": true,
+    "timed_out": false
+  },
+  "security_before": {
+    "command": [
+      "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+      "test",
+      "--json",
+      "--match-test",
+      "^testSecurity\\(.*\\)$",
+      "--use",
+      "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+      "--offline",
+      "--threads",
+      "1"
+    ],
+    "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox/unchecked-call",
+    "duration_seconds": 0.09657504199998357,
+    "exit_code": 1,
+    "stderr": "",
+    "stdout": "{\"test/Security.t.sol:SecurityTest\":{\"duration\":\"306\u00b5s 167ns\",\"test_results\":{\"testSecurity()\":{\"status\":\"Failure\",\"reason\":\"failed payout accepted\",\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":229498}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"153\u00b5s 250ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+    "success": false,
+    "timed_out": false
+  },
+  "security_transition": true
+}

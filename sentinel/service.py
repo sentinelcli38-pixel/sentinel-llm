@@ -43,6 +43,9 @@ def run_scan(
     workspace: Path | None = None
     try:
         def phase_observer(phase: str, current: RuntimeState, status: str, duration: float) -> None:
+            nonlocal workspace
+            if current.workspace_path:
+                workspace = Path(current.workspace_path)
             if telemetry:
                 telemetry.emit("phase", status, phase.replace("_", " "), duration_seconds=round(duration, 3))
 
@@ -55,7 +58,7 @@ def run_scan(
                 )
 
         runner = ControlledRunner(settings.command_timeout_seconds, observer=command_observer if telemetry else None)
-        final_state = RuntimeState.model_validate(build_workflow(runner=runner, observer=phase_observer if telemetry else None).invoke(state))
+        final_state = RuntimeState.model_validate(build_workflow(runner=runner, observer=phase_observer).invoke(state))
         workspace = Path(final_state.workspace_path) if final_state.workspace_path else None
         final_state.workspace_path = None
         final_state.alerts = evaluate_monitors(final_state)
@@ -63,4 +66,4 @@ def run_scan(
         return final_state
     finally:
         if workspace:
-            shutil.rmtree(workspace, ignore_errors=True)
+            shutil.rmtree(workspace.parent, ignore_errors=True)

@@ -1,0 +1,17 @@
+{
+  "finding_id": "novelty-c912c92b94a0e4d5",
+  "type": "privilege-boundary-outlier",
+  "severity": "medium",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 18
+  },
+  "what_was_observed": "This public state-changing function sits beside privileged controls but declares no recognizable access modifier; review the intended authorization model.",
+  "evidence": [
+    "Privileged-control indicators exist in the contract source",
+    "Public/external function has a state-change signal without a recognized modifier",
+    "Source heuristic only; authorization may be enforced internally."
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

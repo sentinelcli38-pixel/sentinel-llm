@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-2f8d2eb59de368fd",
+  "type": "naming-convention",
+  "severity": "informational",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 18
+  },
+  "what_was_observed": "Parameter Phishable.withdrawAll(address)._recipient (src/Case.sol#18) is not in mixedCase\n",
+  "evidence": [
+    "slither:naming-convention: Parameter Phishable.withdrawAll(address)._recipient (src/Case.sol#18) is not in mixedCase\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

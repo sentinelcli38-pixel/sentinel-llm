@@ -1,0 +1,7 @@
+{
+  "dependency_spec": "benchmarks/morpheus-locked-deps.json",
+  "dependency_receipt_sha256": "0cc28fbb5981ac948a6f858e8216af8c852639f82763d2cad41db4e7639663a9",
+  "case_id": "forge-curated-morpheus-depositpool",
+  "previous_manifest": "datasets/external-forge-curated-v2/manifest.json",
+  "scope": "Add the formerly blocked Morpheus target with audited, integrity-verified dependency sources. Reuse OracleLess unchanged. Both labels stay unknown pending human review."
+}

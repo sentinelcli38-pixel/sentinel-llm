@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-d3c5c82fd17e6a4b",
+  "type": "low-level-calls",
+  "severity": "informational",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 12
+  },
+  "what_was_observed": "Low level call in Proxy.proxy(address,bytes) (src/Case.sol#12-15):\n\t- target.call.value(msg.value)(data) (src/Case.sol#14)\n",
+  "evidence": [
+    "slither:low-level-calls: Low level call in Proxy.proxy(address,bytes) (src/Case.sol#12-15):\n\t- target.call.value(msg.value)(data) (src/Case.sol#14)\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

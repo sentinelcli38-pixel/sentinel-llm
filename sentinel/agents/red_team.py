@@ -1,7 +1,9 @@
+import hashlib
 import json
 import re
 from pathlib import Path
 
+from sentinel.foundry.evidence import exploit_tests, oracle_hashes, passed
 from sentinel.foundry.runner import FoundryRunner
 from sentinel.llm.base import LLMProvider
 from sentinel.schemas.artifacts import ExploitArtifact
@@ -20,10 +22,23 @@ class RedTeam:
         finding = next((item for item in state.findings if item.id == state.candidate_id), None)
         if finding is None:
             return state
-        source_file = finding.file or state.source_files[0]
+        state.exploit_confirmed = False
+        state.exploit_artifact = None
+        state.exploit_result = None
+        state.baseline_exploit_result = None
+        state.baseline_regression_result = None
+        state.oracle_test_hashes = {}
+        project = Path(state.workspace_path or state.project_path).resolve()
+        source_file = finding.file or (state.source_files[0] if state.source_files else "")
+        source_path = (project / source_file).resolve()
+        if not source_file or not source_path.is_relative_to(project) or not source_path.is_file():
+            state.feedback.append("Candidate source is missing or outside the project.")
+            state.final_verification_state = "human_review_required"
+            return state
         test_source = self._fixture_test(finding.id, source_file)
+        origin = "reviewed_fixture" if test_source else "model_generated"
         if test_source is None and self.provider is not None:
-            source = (Path(state.workspace_path or state.project_path) / source_file).read_text(encoding="utf-8")
+            source = source_path.read_text(encoding="utf-8")
             prompt = (
                 "Generate one defensive Foundry proof-of-concept test for this vulnerability candidate. "
                 "Return only Solidity source with a testExploit() function. Import the target using the "
@@ -40,23 +55,46 @@ class RedTeam:
             state.feedback.append("No safe deterministic PoC template is available for this candidate.")
             state.final_verification_state = "human_review_required"
             return state
-        test_name = f"Exploit_{finding.id}.t.sol"
-        test_path = Path(state.workspace_path or state.project_path) / "test" / test_name
+        test_name = f"SentinelExploit_{hashlib.sha256(finding.id.encode()).hexdigest()[:16]}.t.sol"
+        test_path = project / "test" / test_name
+        if test_path.exists() or not test_path.resolve().is_relative_to(project):
+            state.feedback.append("Exploit output path already exists or escapes the project; nothing was overwritten.")
+            state.final_verification_state = "human_review_required"
+            return state
         test_path.parent.mkdir(parents=True, exist_ok=True)
         test_path.write_text(test_source, encoding="utf-8")
         state.exploit_source = test_source
         state.exploit_artifact = ExploitArtifact(
             vulnerability_id=finding.id, test_file=str(test_path), source=test_source,
             rationale="The PoC is restricted to the target Foundry project and testExploit.",
+            origin=origin,
         )
-        state.exploit_result = self.foundry.exploit(Path(state.workspace_path or state.project_path))
+        if origin == "model_generated":
+            state.feedback.append("Model-generated PoC saved as an unexecuted draft. Its assertions require human review before they can establish a security finding.")
+            finding.status = FindingStatus.HUMAN_REVIEW_REQUIRED
+            state.final_verification_state = "human_review_required"
+            return state
+        relative_test = test_path.relative_to(project).as_posix()
+        state.oracle_test_hashes = oracle_hashes(project, set(state.original_source))
+        state.exploit_result = self.foundry.exploit(project, test_file=relative_test)
+        state.baseline_exploit_result = state.exploit_result
         state.exploit_artifact.execution = state.exploit_result
-        state.exploit_confirmed = state.exploit_result.success
+        tests = exploit_tests(state.exploit_result, relative_test, "testExploit")
+        state.exploit_confirmed = bool(tests and passed(state.exploit_result, "testExploit"))
         if state.exploit_result.exit_code == -1:
             state.feedback.append("Red Team could not run Forge. Install Foundry and ensure `forge` is on PATH.")
             state.final_verification_state = "execution_unavailable"
             return state
-        finding.status = FindingStatus.CONFIRMED if state.exploit_confirmed else FindingStatus.DISCARDED
+        if not state.exploit_confirmed:
+            finding.status = FindingStatus.HUMAN_REVIEW_REQUIRED
+            state.final_verification_state = "human_review_required"
+            state.feedback.append("The candidate was not confirmed by an executed, passing exploit test. This does not prove it safe.")
+        else:
+            finding.status = FindingStatus.CONFIRMED
+            state.baseline_regression_result = self.foundry.regression(project)
+            if not passed(state.baseline_regression_result):
+                state.final_verification_state = "human_review_required"
+                state.feedback.append("Baseline regression tests are absent, failing, or inconclusive; automated repair is blocked.")
         state.exploit_artifact.confirmed = state.exploit_confirmed
         return state
 

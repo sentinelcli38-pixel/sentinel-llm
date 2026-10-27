@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/MorpheusAIs/SmartContracts",
+  "revision": "091b6f7ecbb2933c9d1a805bd4e4c926a02f38a6",
+  "lockfile": "package-lock.json",
+  "lockfile_sha256": "b5b9bf0a308c10e05a717dbedf56329e38a8f77b9b2e195abe50390bb951e680",
+  "build_config": "hardhat.config.ts",
+  "build_config_sha256": "a5048f96c6f33a644d6b360e89ff9e3692bead3cd0d0d065f66febf9bd1e68a7",
+  "build_settings": {
+    "solc_version": "0.8.20",
+    "optimizer": true,
+    "optimizer_runs": 200,
+    "evm_version": "paris"
+  },
+  "packages": [
+    "@openzeppelin/contracts",
+    "@openzeppelin/contracts-upgradeable",
+    "@solarity/solidity-lib"
+  ],
+  "scope": "Manually reviewed compiler settings from the pinned Hardhat config. Read-only Solidity dependency extraction, not npm installation, execution of upstream configuration, or a production dependency recommendation."
+}

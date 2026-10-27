@@ -7,7 +7,7 @@ from pathlib import Path
 
 from sentinel.schemas.execution import ExecutionResult
 
-ALLOWED_COMMANDS = frozenset({"solc", "slither", "myth", "aderyn", "forge", "cast", "docker"})
+ALLOWED_COMMANDS = frozenset({"solc", "slither", "sentinel-static", "myth", "aderyn", "forge", "cast", "docker"})
 CommandObserver = Callable[[str, Sequence[str], Path, ExecutionResult | None], None]
 
 

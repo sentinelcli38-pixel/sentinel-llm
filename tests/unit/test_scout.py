@@ -108,6 +108,14 @@ def test_slither_vendored_dependency_findings_are_excluded_from_project_audit(pr
     assert [finding.file for finding in bundle.findings] == ["src/nested/Vault.sol", "src/nested/Vault.sol"]
 
 
+def test_slither_unlocated_evidence_is_not_silently_discarded(project):
+    payload = slither_payload()
+    payload["results"]["detectors"][0]["elements"] = []
+    bundle = run_scout_tools(project, AnalyzerRunner(slither=payload), enabled_analyzers={"slither"})
+    assert len(bundle.findings) == 1
+    assert bundle.findings[0].file == ""
+
+
 @pytest.mark.parametrize("raw", ['not json', '[]', '{"success":false}', '{"success":true,"issues":{}}'])
 def test_invalid_mythril_output_rejected(project, raw):
     with pytest.raises((ValueError, TypeError)):
@@ -200,7 +208,7 @@ def test_scout_only_does_not_call_the_llm_provider(project):
 def test_workflow_scout_only_does_not_write_sources_or_run_exploits(project):
     runner = AnalyzerRunner()
     result = build_workflow(runner).invoke(RuntimeState(project_path=str(project), mock_mode=True, scout_only=True))
-    assert result["final_verification_state"] == "scout_complete"
+    assert result["final_verification_state"] == "scout_incomplete"
     assert not (project / "test").exists()
     assert not any(c[0] == "forge" for c in runner.commands)
     assert (project / "src/nested/Vault.sol").read_text() == "contract Vault {}"
@@ -211,7 +219,7 @@ def test_workflow_accepts_intentionally_bounded_mythril_sampling(project):
         (project / "src" / f"Source{index}.sol").write_text(f"contract Source{index} {{}}")
     runner = AnalyzerRunner()
     result = build_workflow(runner).invoke(RuntimeState(project_path=str(project), mock_mode=True, scout_only=True))
-    assert result["final_verification_state"] == "scout_complete"
+    assert result["final_verification_state"] == "scout_incomplete"
     assert result["analyzer_runs"][-1].status == "skipped"
 
 

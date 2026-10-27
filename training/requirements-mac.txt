@@ -1,0 +1,4 @@
+mlx-lm[train]==0.32.0
+mlx==0.32.3
+transformers==5.19.0
+huggingface-hub==2.2.0

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "--version"
+  ],
+  "cwd": "/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-mh92ioox",
+  "duration_seconds": 0.04139787499997283,
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "forge Version: 1.8.3\nCommit SHA: cae51ad458f6abb64852b7709eb784352429825d\nBuild Timestamp: 2026-09-15T10:34:23.361078000Z (1789468463)\nBuild Profile: dist\n",
+  "success": true,
+  "timed_out": false
+}

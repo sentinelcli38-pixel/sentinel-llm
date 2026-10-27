@@ -5,12 +5,14 @@ import typer
 
 from sentinel.config import settings
 from sentinel.experiments import PROFILES, run_experiment
+from sentinel.modeling.cli import app as model_app
 from sentinel.policy import evaluate_policy, load_policy
 from sentinel.reporting.sarif import render_sarif
 from sentinel.schemas.state import RuntimeState
 from sentinel.service import run_scan
 
 app = typer.Typer(help="Sentinel: closed-loop smart-contract security research CLI.")
+app.add_typer(model_app, name="model")
 
 
 @app.callback()
@@ -39,7 +41,8 @@ def scan(
         raise typer.BadParameter(str(exc)) from exc
     typer.echo(f"Sentinel completed: {final_state.final_verification_state}")
     typer.echo(f"Audit report: {final_state.final_report_path}")
-    if scout_only and final_state.final_verification_state != "scout_complete":
+    completed_states = {"scout_complete"} if scout_only else {"verified", "no_candidates"}
+    if final_state.final_verification_state not in completed_states:
         raise typer.Exit(code=2)
 
 
@@ -70,6 +73,7 @@ def benchmark(
     output: Path = typer.Option(Path("reports/experiments"), "--output"),  # noqa: B008
     limit: int | None = typer.Option(None, "--limit", min=1),
     mock: bool = typer.Option(False, "--mock"),
+    require_qualification: bool = typer.Option(False, "--require-qualification", help="Exit nonzero unless the development evaluation gate passes."),
 ) -> None:
     """Run a declared experiment profile and emit label-aware research metrics."""
     try:
@@ -80,6 +84,9 @@ def benchmark(
     typer.echo(f"Sentinel experiment report: {report['report_path']}")
     typer.echo(f"Labeled cases: {metrics['evaluated']}; unlabeled cases: {report['unlabeled_cases']}")
     typer.echo(f"Precision: {metrics['precision']}; recall: {metrics['recall']}; F1: {metrics['f1_score']}")
+    typer.echo(f"Development qualification: {'passed' if report['qualification']['passed'] else 'not passed'}")
+    if require_qualification and not report["qualification"]["passed"]:
+        raise typer.Exit(code=2)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,15 @@
+{
+  "finding_id": "mythril-10565649e2e70c54",
+  "type": "SWC-107",
+  "severity": "low",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 14
+  },
+  "what_was_observed": "External Call To User-Supplied Address\nA call to a user-supplied address is executed.\nAn external message call to an address specified by the caller is executed. Note that the callee account might contain arbitrary code and could re-enter any function within this contract. Reentering the contract in an intermediate state may lead to unexpected behaviour. Make sure that no state modifications are executed after this call and/or reentrancy guards are in place.",
+  "evidence": [
+    "mythril:SWC-107: A call to a user-supplied address is executed.\nAn external message call to an address specified by the caller is executed. Note that the callee account might contain arbitrary code and could re-enter any function within this contract. Reentering the contract in an intermediate state may lead to unexpected behaviour. Make sure that no state modifications are executed after this call and/or reentrancy guards are in place."
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

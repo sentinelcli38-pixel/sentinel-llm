@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/Users/dev/.foundry/versions/foundry-rs/foundry/v1.8.3/forge",
+    "test",
+    "--json",
+    "--no-match-test",
+    "^testExploit\\(.*\\)$",
+    "--use",
+    "/Users/dev/.solc-select/artifacts/solc-0.8.20/solc-0.8.20",
+    "--offline",
+    "--threads",
+    "1"
+  ],
+  "cwd": "/private/var/folders/5q/wytk6ysd6f7dxjmvwn0hqj180000gn/T/sentinel-evidence-jilxy3vt/access-control",
+  "duration_seconds": 0.10613695799997913,
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "{\"test/Functional.t.sol:FunctionalTest\":{\"duration\":\"324\u00b5s 875ns\",\"test_results\":{\"testFunctional()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":70286}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"143\u00b5s 250ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]},\"test/Treasury.t.sol:TreasuryTest\":{\"duration\":\"73\u00b5s 416ns\",\"test_results\":{\"testOwnerIsRecorded()\":{\"status\":\"Success\",\"reason\":null,\"counterexample\":null,\"logs\":[],\"decoded_logs\":[],\"kind\":{\"Unit\":{\"gas\":7855}},\"traces\":[],\"labeled_addresses\":{},\"duration\":\"12\u00b5s 959ns\",\"breakpoints\":{},\"gas_snapshots\":{}}},\"warnings\":[]}}\n",
+  "success": true,
+  "timed_out": false
+}

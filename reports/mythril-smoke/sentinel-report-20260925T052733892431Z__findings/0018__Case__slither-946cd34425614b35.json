@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-946cd34425614b35",
+  "type": "naming-convention",
+  "severity": "informational",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 20
+  },
+  "what_was_observed": "Variable DepositProxy.Deposits (src/Case.sol#20) is not in mixedCase\n",
+  "evidence": [
+    "slither:naming-convention: Variable DepositProxy.Deposits (src/Case.sol#20) is not in mixedCase\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}

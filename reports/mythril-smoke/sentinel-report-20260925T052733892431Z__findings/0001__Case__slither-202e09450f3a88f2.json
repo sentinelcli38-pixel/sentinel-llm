@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-202e09450f3a88f2",
+  "type": "shadowing-state",
+  "severity": "high",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 19
+  },
+  "what_was_observed": "DepositProxy.Owner (src/Case.sol#19) shadows:\n\t- Proxy.Owner (src/Case.sol#10)\n",
+  "evidence": [
+    "slither:shadowing-state: DepositProxy.Owner (src/Case.sol#19) shadows:\n\t- Proxy.Owner (src/Case.sol#10)\n"
+  ],
+  "pipeline_status": "selected_for_agentic_validation",
+  "patch_file": null
+}

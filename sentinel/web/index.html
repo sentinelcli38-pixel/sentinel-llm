@@ -24,15 +24,80 @@
 </main>
 <script>
 const $=id=>document.getElementById(id);let selected=null,scans=[];
-const escape=v=>String(v??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));const title=v=>String(v||'--').replaceAll('_',' ');const bool=v=>v===true?'pass':v===false?'fail':'warn';
-function gate(name,state,detail){return `<div class="gate ${state}"><i></i><div><strong>${name}</strong><small>${detail}</small></div><b>${state==='pass'?'PASS':state==='fail'?'FAIL':'PENDING'}</b></div>`}
+const escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const title=v=>String(v||'--').replaceAll('_',' ');const bool=v=>v===true?'pass':v===false?'fail':'warn';
+function gate(name,state,detail){return `<div class="gate ${escape(state)}"><i></i><div><strong>${escape(name)}</strong><small>${escape(detail)}</small></div><b>${state==='pass'?'PASS':state==='fail'?'FAIL':'PENDING'}</b></div>`}
 function renderScanList(){ $('scan-count').textContent=scans.length;$('scan-list').innerHTML=scans.length?scans.map(scan=>`<button class="scan ${escape(scan.final_state)} ${selected===scan.ledger_name?'active':''}" data-ledger="${escape(scan.ledger_name||'')}"><i></i><div><strong>${escape(scan.report_path||'Unsaved report')}</strong><span>${scan.findings} candidate(s) · ${scan.confirmed} confirmed</span></div><b>${escape(title(scan.final_state))}</b></button>`).join(''):'<p class="empty">No saved scans yet.</p>'}
-function renderLedger(state){if(!state)return; $('active-target').textContent=state.project_path;$('finding-count').textContent=state.findings.length;$('confirmed-count').textContent=state.findings.filter(f=>f.status==='confirmed').length;$('outcome').textContent=title(state.final_verification_state);$('final-state').textContent=title(state.final_verification_state);$('source-files').textContent=state.source_files.length;$('retries').textContent=`${state.retry_count}/${state.max_retries}`;$('artifact-count').textContent=state.report_artifacts.length;$('finding-meta').textContent=`${state.findings.length} recorded`;const judge=state.judge_result||{};const analyzers=state.analyzer_runs||[];const coverage=analyzers.length&&analyzers.every(run=>['completed','skipped'].includes(run.status));$('gates').innerHTML=[gate('Scanner coverage',coverage?'pass':analyzers.length?'fail':'warn',coverage?'tool runs completed or were intentionally bounded':'review analyzer diagnostics'),gate('Exploit proof',bool(state.exploit_confirmed),state.exploit_confirmed?'Forge reproduced the selected impact':'no empirical exploit confirmation'),gate('Patch synthesis',bool(Boolean(state.patch_diff)),state.patch_diff?'minimal diff recorded':'no remediation artifact'),gate('Build verification',bool(judge.build_passed),judge.build_passed?'patched workspace built':'Judge did not clear build'),gate('Regression suite',bool(judge.regression_passed),judge.regression_passed?'non-exploit tests preserved':'Judge did not clear regression')].join('');const risk=state.risk_assessment||{};$('protocol-label').textContent=`${risk.contract_count||0} contracts · ${risk.relationship_count||0} relationships`;$('protocol-risk').innerHTML=risk.assessments?.length?risk.assessments.map(item=>gate(`Finding ${item.finding_id}`,item.priority==='elevated'?'warn':'pass',item.signals.join(' · ')||'no additional protocol signals')).join(''):'<p class="empty">No cross-contract review signals were recorded.</p>';const novelty=state.novelty_assessment||{};$('novelty-label').textContent=novelty.review_required?`${novelty.candidate_count||0} review signal(s)`:'No signals';const noveltySignals=Object.entries(novelty.signal_counts||{});$('novelty-risk').innerHTML=noveltySignals.length?noveltySignals.map(([kind,count])=>gate(title(kind),'warn',`${count} source-level occurrence(s) · human review required`)).join(''):'<p class="empty">No unknown-risk source signals were recorded.</p>';$('findings').innerHTML=state.findings.length?state.findings.map(f=>`<article class="finding"><div class="meta"><span class="severity ${escape(f.severity)}">${escape(f.severity)}</span><span>${escape(f.source)}</span><span>${escape(f.status)}</span></div><h3>${escape(f.description)}</h3><p>${escape(f.file||'location unavailable')}${f.line?`:${f.line}`:''} · ${escape(f.detector)}</p>${f.evidence?.length?`<div class="note">${escape(f.evidence.join(' · '))}</div>`:''}</article>`).join(''):'<p class="empty">No candidates were recorded.</p>';$('patch').textContent=state.patch_diff||'No patch was generated. A candidate remains unverified until Forge reproduces the impact.';const toolNotes=analyzers.map(run=>`${run.tool} / ${run.target}: ${run.status}${run.diagnostics?.length?'\n  '+run.diagnostics.join('\n  '):''}`).join('\n\n');$('notes').textContent=[toolNotes,state.feedback?.length?'Notes:\n'+state.feedback.join('\n'):'' ].filter(Boolean).join('\n\n')||'No diagnostics recorded.';$('artifacts').innerHTML=state.report_artifacts.length?state.report_artifacts.map(a=>`<span class="artifact">${escape(a)}</span>`).join(''):'<p class="empty">No report artifacts were generated.</p>'}
+function renderLedger(state){
+  if(!state)return;
+  $('active-target').textContent=state.project_path;
+  $('finding-count').textContent=state.findings.length;
+  $('confirmed-count').textContent=state.findings.filter(f=>f.status==='confirmed').length;
+  const judge=state.judge_result||{};
+  const qualified=judge.evidence_version===1;
+  const outcome=state.final_verification_state==='verified'&&!qualified?'legacy verification; rescan required':title(state.final_verification_state);
+  $('outcome').textContent=outcome;
+  $('final-state').textContent=outcome;
+  $('source-files').textContent=state.source_files.length;
+  $('retries').textContent=`${state.retry_count}/${state.max_retries}`;
+  $('artifact-count').textContent=state.report_artifacts.length;
+  $('finding-meta').textContent=`${state.findings.length} recorded`;
+  const analyzers=state.analyzer_runs||[];
+  const enabled=state.enabled_analyzers||[];
+  const coverage=!state.mock_mode&&enabled.length>0&&analyzers.length>0&&analyzers.every(run=>run.status==='completed')&&enabled.every(tool=>analyzers.some(run=>run.tool===tool));
+  $('gates').innerHTML=[gate('Scanner coverage',coverage?'pass':analyzers.length?'fail':'warn',coverage?'all enabled analyzers completed':'incomplete coverage; review skipped, missing, or demo analysis'),gate('Exploit proof',bool(state.exploit_confirmed&&Boolean(state.baseline_exploit_result)),state.exploit_confirmed&&state.baseline_exploit_result?'Forge reproduced the selected impact':'no qualified empirical exploit confirmation'),gate('Patch synthesis',bool(Boolean(state.patch_diff)),state.patch_diff?'proposed diff; approval depends on Judge':'no remediation artifact'),gate('Build verification',bool(qualified?judge.build_passed:undefined),qualified&&judge.build_passed?'patched workspace built':'no qualified Judge build evidence'),gate('Regression suite',bool(qualified?judge.regression_passed:undefined),qualified&&judge.regression_passed?'same nonempty baseline suite passed':'no qualified regression evidence')].join('');
+  const risk=state.risk_assessment||{};
+  $('protocol-label').textContent=`${risk.contract_count||0} contracts · ${risk.relationship_count||0} relationships`;
+  $('protocol-risk').innerHTML=risk.assessments?.length?risk.assessments.map(item=>gate(`Finding ${item.finding_id}`,item.priority==='elevated'?'warn':'pass',item.signals.join(' · ')||'no additional protocol signals')).join(''):'<p class="empty">No cross-contract review signals were recorded.</p>';
+  const novelty=state.novelty_assessment||{};
+  $('novelty-label').textContent=novelty.review_required?`${novelty.candidate_count||0} review signal(s)`:'No signals';
+  const noveltySignals=Object.entries(novelty.signal_counts||{});
+  $('novelty-risk').innerHTML=noveltySignals.length?noveltySignals.map(([kind,count])=>gate(title(kind),'warn',`${count} source-level occurrence(s) · human review required`)).join(''):'<p class="empty">No unknown-risk source signals were recorded.</p>';
+  $('findings').innerHTML=state.findings.length?state.findings.map(f=>`<article class="finding"><div class="meta"><span class="severity ${escape(f.severity)}">${escape(f.severity)}</span><span>${escape(f.source)}</span><span>${escape(f.status)}</span></div><h3>${escape(f.description)}</h3><p>${escape(f.file||'location unavailable')}${f.line?`:${f.line}`:''} · ${escape(f.detector)}</p>${f.evidence?.length?`<div class="note">${escape(f.evidence.join(' · '))}</div>`:''}</article>`).join(''):'<p class="empty">No candidates were recorded.</p>';
+  $('patch').textContent=state.patch_diff||'No patch was generated. A candidate remains unverified until Forge reproduces the impact.';
+  const toolNotes=analyzers.map(run=>`${run.tool} / ${run.target}: ${run.status}${run.diagnostics?.length?'\n  '+run.diagnostics.join('\n  '):''}`).join('\n\n');
+  $('notes').textContent=[toolNotes,state.feedback?.length?'Notes:\n'+state.feedback.join('\n'):'' ].filter(Boolean).join('\n\n')||'No diagnostics recorded.';
+  $('artifacts').innerHTML=state.report_artifacts.length?state.report_artifacts.map(a=>`<span class="artifact">${escape(a)}</span>`).join(''):'<p class="empty">No report artifacts were generated.</p>';
+}
 function renderAlerts(state){const alerts=state.alerts||[];$('alert-label').textContent=`${alerts.length} active`; $('alerts').innerHTML=alerts.length?alerts.map(item=>gate(item.rule_id,item.severity==='critical'?'fail':'warn',item.summary)).join(''):'<p class="empty">No local operational alerts are active.</p>'}
 async function loadLedger(name){if(!name)return;const response=await fetch('/scans/'+encodeURIComponent(name));if(response.ok){selected=name;const state=await response.json();renderLedger(state);renderAlerts(state);renderScanList()}}
 async function refresh(){const response=await fetch('/scans');if(!response.ok)return;scans=await response.json();renderScanList();if(!selected&&scans[0]?.ledger_name)loadLedger(scans[0].ledger_name)}
 async function refreshComparison(){if(scans.length<2)return;const query=new URLSearchParams({base:scans[1].ledger_name,current:scans[0].ledger_name});const response=await fetch('/scans/compare?'+query);if(!response.ok)return;const data=await response.json();$('comparison-label').textContent=`${title(data.base_outcome)} → ${title(data.current_outcome)}`;$('comparison').innerHTML=[gate('Introduced findings',data.introduced.length?'fail':'pass',`${data.introduced.length} new evidence record(s)`),gate('Resolved findings',data.resolved.length?'pass':'warn',`${data.resolved.length} no longer present`),gate('Persistent findings',data.persisted.length?'warn':'pass',`${data.persisted.length} still require attention`),gate('Coverage regressions',data.coverage_regressions.length?'fail':'pass',`${data.coverage_regressions.length} scanner coverage change(s)`)].join('')}
-$('scan-list').addEventListener('click',event=>{const ledger=event.target.closest('[data-ledger]')?.dataset.ledger;if(ledger)loadLedger(ledger)});$('scan-form').addEventListener('submit',async event=>{event.preventDefault();const button=$('run');button.disabled=true;$('notice').textContent='Queued. Establishing an isolated workspace…';try{const response=await fetch('/runs',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({project_path:$('path').value,mock:$('mock').checked,scout_only:$('scout').checked})});const body=await response.json();if(!response.ok)throw new Error(body.detail||'Could not start assessment');const stream=new EventSource(`/runs/${body.run_id}/events`);stream.addEventListener('update',event=>{const item=JSON.parse(event.data);$('notice').textContent=`${title(item.category)} · ${item.summary}`;if(['completed','failed'].includes(item.status)){stream.close();button.disabled=false;refresh().then(refreshComparison)}});stream.addEventListener('error',()=>{stream.close();button.disabled=false;refresh().then(refreshComparison)})}catch(error){$('notice').textContent=error.message;button.disabled=false}});refresh().then(refreshComparison);setInterval(()=>{refresh().then(refreshComparison)},4000);
+$('scan-list').addEventListener('click',event=>{
+  const ledger=event.target.closest('[data-ledger]')?.dataset.ledger;
+  if(ledger)loadLedger(ledger);
+});
+$('scan-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const button=$('run');
+  button.disabled=true;
+  $('notice').textContent='Queued. Establishing an isolated workspace…';
+  try{
+    const response=await fetch('/runs',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({project_path:$('path').value,mock:$('mock').checked,scout_only:$('scout').checked})});
+    const body=await response.json();
+    if(!response.ok)throw new Error(body.detail||'Could not start assessment');
+    const stream=new EventSource(`/runs/${body.run_id}/events`);
+    let connectionFailures=0;
+    stream.addEventListener('update',event=>{
+      connectionFailures=0;
+      const item=JSON.parse(event.data);
+      $('notice').textContent=`${title(item.category)} · ${item.summary}`;
+      if(item.category==='run'&&['completed','failed'].includes(item.status)){
+        stream.close();button.disabled=false;refresh().then(refreshComparison);
+      }
+    });
+    stream.addEventListener('error',()=>{
+      connectionFailures+=1;
+      $('notice').textContent='Live connection interrupted; reconnecting. The assessment may still be running.';
+      if(connectionFailures>=3){
+        stream.close();button.disabled=false;
+        $('notice').textContent='Live connection unavailable. Run status is unknown; check assessment history before starting again.';
+        refresh().then(refreshComparison);
+      }
+    });
+  }catch(error){$('notice').textContent=error.message;button.disabled=false}
+});
+refresh().then(refreshComparison);
+setInterval(()=>{refresh().then(refreshComparison)},4000);
 </script>
 </body>
 </html>

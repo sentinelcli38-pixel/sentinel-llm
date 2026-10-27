@@ -17,10 +17,11 @@ def test_experiment_metrics_ignore_unlabeled_cases(tmp_path: Path) -> None:
 
     def fake_scan(project: Path, **kwargs) -> RuntimeState:
         findings = [] if project.name == "clean" else [VulnerabilityFinding(
-            id=project.name, source="test", detector="test", description="candidate",
+            id=project.name, source="slither", detector="reentrancy-eth", description="candidate",
         )]
         return RuntimeState(
             project_path=str(project), findings=findings, final_report_path=str(kwargs["output"] / "report.md"),
+            enabled_analyzers=["slither"],
             analyzer_runs=[AnalyzerRun(tool="slither", target=".", status="completed")],
         )
 

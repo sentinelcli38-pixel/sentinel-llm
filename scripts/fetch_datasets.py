@@ -17,9 +17,18 @@ class Dataset:
     directory: str
     purpose: str
     recurse_submodules: bool = False
+    sparse_paths: tuple[str, ...] = ()
 
 
 DATASETS = {
+    "cgt": Dataset(
+        name="Consolidated Ground Truth",
+        url="https://github.com/gsalzer/cgt.git",
+        revision="f8cd72cf7fbbfebc809c454667eee271706a4b2b",
+        directory="cgt",
+        purpose="Manually assessed positive and negative properties, not whole-contract safety labels.",
+        sparse_paths=("/source/", "/consolidated.csv", "/construction/sql/02_mapping.csv"),
+    ),
     "smartbugs-curated": Dataset(
         name="SmartBugs Curated",
         url="https://github.com/smartbugs/smartbugs-curated.git",
@@ -73,6 +82,8 @@ def fetch(dataset: Dataset, root: Path) -> Path:
     with tempfile.TemporaryDirectory(dir=root, prefix=f".{dataset.directory}-") as temp:
         clone_target = Path(temp) / dataset.directory
         command = ["git", "clone", "--depth", "1"]
+        if dataset.sparse_paths:
+            command.extend(["--filter=blob:none", "--sparse"])
         if dataset.recurse_submodules:
             command.append("--recurse-submodules")
         command.extend([dataset.url, str(clone_target)])
@@ -83,6 +94,8 @@ def fetch(dataset: Dataset, root: Path) -> Path:
                 f"Upstream revision changed for {dataset.name}: expected {dataset.revision}, got {revision}. "
                 "Update this registry intentionally after reviewing the new dataset."
             )
+        if dataset.sparse_paths:
+            subprocess.run(["git", "-C", str(clone_target), "sparse-checkout", "set", "--no-cone", *dataset.sparse_paths], check=True)
         clone_target.rename(target)
     print(f"Fetched {dataset.name} at {dataset.revision[:12]} into {target}")
     return target

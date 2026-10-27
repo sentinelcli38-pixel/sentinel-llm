@@ -19,6 +19,7 @@ class ExecutionResult(BaseModel):
 
 
 class JudgeResult(BaseModel):
+    evidence_version: int = 0
     build_passed: bool = False
     exploit_neutralized: bool = False
     regression_passed: bool = False

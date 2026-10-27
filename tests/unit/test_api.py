@@ -2,9 +2,11 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from sentinel.api import app
+from sentinel.api import RUNS, _response, app
+from sentinel.schemas.execution import JudgeResult
 from sentinel.schemas.state import RuntimeState
 from sentinel.schemas.vulnerability import VulnerabilityFinding
+from sentinel.telemetry import RunTelemetry
 
 
 def test_health_and_dashboard_are_available() -> None:
@@ -77,3 +79,26 @@ def test_compare_endpoint_reports_introduced_findings(monkeypatch, tmp_path: Pat
 
     assert response.status_code == 200
     assert response.json()["introduced"][0]["id"] == "new"
+
+
+def test_completed_run_replays_events_without_waiting(monkeypatch) -> None:
+    telemetry = RunTelemetry()
+    telemetry.emit("phase", "completed", "ingest finished")
+    telemetry.finish("completed", "assessment finished")
+    monkeypatch.setitem(RUNS, telemetry.run_id, telemetry)
+
+    def unexpected_wait(*args, **kwargs):
+        raise AssertionError("Completed events must replay without waiting for another event")
+
+    monkeypatch.setattr(telemetry.condition, "wait", unexpected_wait)
+    response = TestClient(app).get(f"/runs/{telemetry.run_id}/events")
+    assert response.status_code == 200
+    assert "ingest finished" in response.text
+    assert "assessment finished" in response.text
+
+
+def test_legacy_verification_is_not_promoted_to_qualified_success():
+    state = RuntimeState(project_path="/project", final_verification_state="verified", judge_result=JudgeResult(verified=True))
+    assert _response(state).final_state == "legacy_verification_requires_rescan"
+    state.judge_result.evidence_version = 1
+    assert _response(state).final_state == "verified"

@@ -1,0 +1,15 @@
+{
+  "finding_id": "slither-02c2e7f5c256eb5a",
+  "type": "tx-origin",
+  "severity": "medium",
+  "location": {
+    "file": "src/Case.sol",
+    "line": 18
+  },
+  "what_was_observed": "Phishable.withdrawAll(address) (src/Case.sol#18-22) uses tx.origin for authorization: require(bool)(tx.origin == owner) (src/Case.sol#20)\n",
+  "evidence": [
+    "slither:tx-origin: Phishable.withdrawAll(address) (src/Case.sol#18-22) uses tx.origin for authorization: require(bool)(tx.origin == owner) (src/Case.sol#20)\n"
+  ],
+  "pipeline_status": "scout_candidate",
+  "patch_file": null
+}
